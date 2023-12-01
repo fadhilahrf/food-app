@@ -4,11 +4,8 @@ import { HttpResponse, HttpHeaders } from '@angular/common/http';
 import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import SharedModule from 'app/shared/shared.module';
-import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 import { ASC, DESC, SORT } from 'app/config/navigation.constants';
-import { ItemCountComponent } from 'app/shared/pagination';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { UserManagementService } from '../service/user-management.service';
@@ -16,10 +13,8 @@ import { User } from '../user-management.model';
 import UserManagementDeleteDialogComponent from '../delete/user-management-delete-dialog.component';
 
 @Component({
-  standalone: true,
   selector: 'jhi-user-mgmt',
-  templateUrl: './user-management.component.html',
-  imports: [RouterModule, SharedModule, SortDirective, SortByDirective, UserManagementDeleteDialogComponent, ItemCountComponent],
+  templateUrl: './user-management.component.html'
 })
 export default class UserManagementComponent implements OnInit {
   currentAccount: Account | null = null;

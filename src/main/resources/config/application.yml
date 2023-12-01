@@ -187,3 +187,5 @@ jhipster:
 # ===================================================================
 
 # application:
+firebase:
+  credential-file-path: {credential-file-path}

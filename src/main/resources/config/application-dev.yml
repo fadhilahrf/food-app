@@ -95,3 +95,7 @@ jhipster:
 # ===================================================================
 
 # application:
+firebase:
+  storage:
+    bucket-name: {bucket-name}
+    media-path: {media-path}

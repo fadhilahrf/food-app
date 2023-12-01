@@ -4,6 +4,7 @@
   "compilerOptions": {
     "composite": true,
     "outDir": "target/out-tsc/spec",
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
+    "noEmit": true
   }
 }

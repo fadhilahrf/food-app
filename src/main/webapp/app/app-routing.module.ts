@@ -6,48 +6,36 @@ import { Authority } from 'app/config/authority.constants';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 import { errorRoute } from './layouts/error/error.route';
 
-import HomeComponent from './home/home.component';
-import NavbarComponent from './layouts/navbar/navbar.component';
-import LoginComponent from './login/login.component';
+import { navbarRoute } from './layouts/navbar/navbar.route';
 
 @NgModule({
   imports: [
     RouterModule.forRoot(
       [
         {
-          path: '',
-          component: HomeComponent,
-          title: 'home.title',
-        },
-        {
-          path: '',
-          component: NavbarComponent,
-          outlet: 'navbar',
-        },
-        {
           path: 'admin',
           data: {
             authorities: [Authority.ADMIN],
           },
           canActivate: [UserRouteAccessService],
-          loadChildren: () => import('./admin/admin-routing.module'),
+          loadChildren: () => import('./admin/admin-routing.module').then(m => m.AdminRoutingModule),
         },
         {
           path: 'account',
-          loadChildren: () => import('./account/account.route'),
+          loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
         },
         {
           path: 'login',
-          component: LoginComponent,
-          title: 'login.title',
+          loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
         },
         {
           path: '',
-          loadChildren: () => import(`./entities/entity-routing.module`).then(({ EntityRoutingModule }) => EntityRoutingModule),
+          loadChildren: () => import(`./entities/entity-routing.module`).then(m => m.EntityRoutingModule),
         },
+        navbarRoute,
         ...errorRoute,
       ],
-      { enableTracing: DEBUG_INFO_ENABLED, bindToComponentInputs: true },
+      { enableTracing: DEBUG_INFO_ENABLED },
     ),
   ],
   exports: [RouterModule],

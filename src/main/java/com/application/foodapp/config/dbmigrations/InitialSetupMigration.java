@@ -1,6 +1,7 @@
 package com.application.foodapp.config.dbmigrations;
 
 import com.application.foodapp.config.Constants;
+import com.application.foodapp.config.Constants.RecordStatus;
 import com.application.foodapp.domain.Authority;
 import com.application.foodapp.domain.User;
 import com.application.foodapp.security.AuthoritiesConstants;
@@ -69,6 +70,7 @@ public class InitialSetupMigration {
         userUser.setLangKey("en");
         userUser.setCreatedBy(Constants.SYSTEM);
         userUser.setCreatedDate(Instant.now());
+        userUser.setRecordStatusId(RecordStatus.ACTIVE);
         userUser.getAuthorities().add(userAuthority);
         return userUser;
     }
@@ -85,6 +87,7 @@ public class InitialSetupMigration {
         adminUser.setLangKey("en");
         adminUser.setCreatedBy(Constants.SYSTEM);
         adminUser.setCreatedDate(Instant.now());
+        adminUser.setRecordStatusId(RecordStatus.ACTIVE);
         adminUser.getAuthorities().add(adminAuthority);
         adminUser.getAuthorities().add(userAuthority);
         return adminUser;

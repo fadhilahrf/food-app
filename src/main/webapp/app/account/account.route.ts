@@ -7,13 +7,11 @@ import passwordResetInitRoute from './password-reset/init/password-reset-init.ro
 import registerRoute from './register/register.route';
 import settingsRoute from './settings/settings.route';
 
-const accountRoutes: Routes = [
-  activateRoute,
-  passwordRoute,
-  passwordResetFinishRoute,
-  passwordResetInitRoute,
-  registerRoute,
-  settingsRoute,
-];
+const ACCOUNT_ROUTES = [activateRoute, passwordRoute, passwordResetFinishRoute, passwordResetInitRoute, registerRoute, settingsRoute];
 
-export default accountRoutes;
+export const accountState: Routes = [
+  {
+    path: '',
+    children: ACCOUNT_ROUTES,
+  },
+];

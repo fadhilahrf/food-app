@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Locale;
@@ -20,7 +19,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
  * A user.
  */
 @org.springframework.data.mongodb.core.mapping.Document(collection = "jhi_user")
-public class User extends AbstractAuditingEntity<String> implements Serializable {
+public class User extends AbstractAuditingEntity<String> {
 
     private static final long serialVersionUID = 1L;
 

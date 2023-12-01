@@ -6,8 +6,6 @@ import { PasswordResetInitService } from './password-reset-init.service';
 
 @Component({
   selector: 'jhi-password-reset-init',
-  standalone: true,
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
   templateUrl: './password-reset-init.component.html',
 })
 export default class PasswordResetInitComponent implements AfterViewInit {

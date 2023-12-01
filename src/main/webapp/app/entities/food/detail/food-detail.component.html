@@ -1,0 +1,44 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="food">
+      <h2 data-cy="foodDetailsHeading"><span jhiTranslate="foodApp.food.detail.title">Food</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ food.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="foodApp.food.name">Name</span></dt>
+        <dd>
+          <span>{{ food.name }}</span>
+        </dd>
+        <dt><span jhiTranslate="foodApp.food.price">Price</span></dt>
+        <dd>
+          <span>{{ food.price }}</span>
+        </dd>
+        <dt><span jhiTranslate="foodApp.food.imgUrl">Img Url</span></dt>
+        <dd>
+          <span>{{ food.imgUrl }}</span>
+        </dd>
+        <dt><span >Image</span></dt>
+        <dd *ngIf="food.imgUrl">
+          <img [src]="food.imgUrl ? food.imgUrl : BLANK_IMAGE_URL" style="max-width: 300px; max-height: 300px;" />
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/food', food.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

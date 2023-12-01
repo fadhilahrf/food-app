@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
  * Base abstract class for entities which will hold definitions for created, last modified, created by,
  * last modified by attributes.
  */
-@JsonIgnoreProperties(value = { "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate" }, allowGetters = true)
+@JsonIgnoreProperties(value = { "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate", "recordStatusId" }, allowGetters = true)
 public abstract class AbstractAuditingEntity<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,6 +35,9 @@ public abstract class AbstractAuditingEntity<T> implements Serializable {
     @LastModifiedDate
     @Field("last_modified_date")
     private Instant lastModifiedDate = Instant.now();
+
+    @Field("record_status_id")
+    private Integer recordStatusId;
 
     public String getCreatedBy() {
         return createdBy;
@@ -67,4 +70,13 @@ public abstract class AbstractAuditingEntity<T> implements Serializable {
     public void setLastModifiedDate(Instant lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
+    
+    public Integer getRecordStatusId() {
+        return recordStatusId;
+    }
+
+    public void setRecordStatusId(Integer recordStatusId) {
+        this.recordStatusId = recordStatusId;
+    }
+
 }

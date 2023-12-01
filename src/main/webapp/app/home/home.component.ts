@@ -8,11 +8,9 @@ import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 
 @Component({
-  standalone: true,
   selector: 'jhi-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  imports: [SharedModule, RouterModule],
 })
 export default class HomeComponent implements OnInit, OnDestroy {
   account: Account | null = null;

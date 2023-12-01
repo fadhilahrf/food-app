@@ -1,17 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 
-import SharedModule from 'app/shared/shared.module';
-import { FormsModule } from '@angular/forms';
-import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { Log, LoggersResponse, Level } from './log.model';
 import { LogsService } from './logs.service';
 
 @Component({
-  standalone: true,
   selector: 'jhi-logs',
   templateUrl: './logs.component.html',
-  imports: [SharedModule, FormsModule, SortDirective, SortByDirective],
 })
 export default class LogsComponent implements OnInit {
   loggers?: Log[];

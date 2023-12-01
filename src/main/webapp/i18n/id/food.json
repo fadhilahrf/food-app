@@ -1,0 +1,26 @@
+{
+  "foodApp": {
+    "food": {
+      "home": {
+        "title": "Foods",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Buat Food baru",
+        "createOrEditLabel": "Buat atau edit Food",
+        "notFound": "No Foods found"
+      },
+      "created": "Food dengan id {{ param }} telah dibuat",
+      "updated": "Food dengan id {{ param }} telah diperbaharui",
+      "deleted": "Food dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus Food {{ id }}?"
+      },
+      "detail": {
+        "title": "Food"
+      },
+      "id": "ID",
+      "name": "Name",
+      "price": "Price",
+      "imgUrl": "Image URL"
+    }
+  }
+}
