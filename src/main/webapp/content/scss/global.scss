@@ -208,3 +208,22 @@ angular-cli removes postcss-rtl processed inline css, processed rules must be ad
   }
 }
 /* jhipster-needle-scss-add-main JHipster will add new css style */
+.ng-select .ng-select-container {
+  border: none;
+  background-color: transparent;
+}
+
+.ng-select.ng-select-focused:not(.ng-select-opened) > .ng-select-container {
+  box-shadow: none;
+}
+
+.ng-select.ng-select-opened > .ng-select-container {
+  border: none;
+  background-color: transparent;
+}
+
+.ng-dropdown-panel {
+  margin-top: 5px !important;
+  width: -webkit-fill-available !important;
+  margin-left: 2%;
+}

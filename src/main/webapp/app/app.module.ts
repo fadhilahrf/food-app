@@ -11,7 +11,6 @@ import { NgbDateAdapter, NgbDatepickerConfig, NgbPaginationModule } from '@ng-bo
 
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import './config/dayjs';
-import { TranslationModule } from 'app/shared/language/translation.module';
 import { httpInterceptorProviders } from 'app/core/interceptor/index';
 import { AppRoutingModule } from './app-routing.module';
 // jhipster-needle-angular-add-module-import JHipster will add new module here

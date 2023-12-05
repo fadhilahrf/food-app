@@ -75,7 +75,6 @@ export class FoodUpdateComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     const food = this.foodFormService.getFood(this.editForm);
-    food.imgUrl = "";
     if (food.id !== null) {
       this.subscribeToSaveResponse(this.foodService.update(food));
     } else {

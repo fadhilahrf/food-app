@@ -177,7 +177,7 @@ public class FoodResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFood(@PathVariable String id) {
+    public ResponseEntity<Void> deleteFood(@PathVariable String id) throws Exception {
         log.debug("REST request to delete Food : {}", id);
         foodService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build();

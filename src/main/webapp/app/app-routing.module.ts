@@ -32,6 +32,10 @@ import { navbarRoute } from './layouts/navbar/navbar.route';
           path: '',
           loadChildren: () => import(`./entities/entity-routing.module`).then(m => m.EntityRoutingModule),
         },
+        {
+          path: 'foods',
+          loadChildren: () => import(`./marketplace/marketplace.module`).then(m => m.MarketplaceModule),
+        },
         navbarRoute,
         ...errorRoute,
       ],

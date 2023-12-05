@@ -1,57 +1,43 @@
-import { Component, OnInit } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Data, ParamMap, Router } from '@angular/router';
-import { combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
+import { ASC, DEFAULT_SORT_DATA, DESC, SORT } from 'app/config/navigation.constants';
 import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
-import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
-import { IFood } from '../food.model';
-import { EntityArrayResponseType, FoodService } from '../service/food.service';
-import { FoodDeleteDialogComponent } from '../delete/food-delete-dialog.component';
+import { IFood } from 'app/entities/food/food.model';
+import { EntityArrayResponseType, FoodService } from 'app/entities/food/service/food.service';
+import { Observable, combineLatest, switchMap, tap } from 'rxjs';
 
 @Component({
-  selector: 'jhi-food',
-  templateUrl: './food.component.html',
+  selector: 'jhi-food-list',
+  templateUrl: './food-list.component.html',
+  styleUrls: ['./food-list.component.scss']
 })
-export class FoodComponent implements OnInit {
+export class FoodListComponent implements OnInit {
   foods?: IFood[];
   isLoading = false;
 
   predicate = 'id';
   ascending = true;
 
-  itemsPerPage = ITEMS_PER_PAGE;
+  itemsPerPage = 5;
   totalItems = 0;
   page = 1;
+
+  SORT_OPTION = [
+    { value: 'name', text: 'name' },
+    { value: 'price', text: 'price' },
+  ];
+
+  selectedSortOption = 'name';
 
   constructor(
     protected foodService: FoodService,
     protected activatedRoute: ActivatedRoute,
     public router: Router,
-    protected modalService: NgbModal,
-  ) {}
-
-  trackId = (_index: number, item: IFood): string => this.foodService.getFoodIdentifier(item);
+    ){}
 
   ngOnInit(): void {
     this.load();
-  }
-
-  delete(food: IFood): void {
-    const modalRef = this.modalService.open(FoodDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.food = food;
-    // unsubscribe not needed because closed completes on modal close
-    modalRef.closed
-      .pipe(
-        filter(reason => reason === ITEM_DELETED_EVENT),
-        switchMap(() => this.loadFromBackendWithRouteInformations()),
-      )
-      .subscribe({
-        next: (res: EntityArrayResponseType) => {
-          this.onResponseSuccess(res);
-        },
-      });
   }
 
   load(): void {
@@ -68,6 +54,29 @@ export class FoodComponent implements OnInit {
 
   navigateToPage(page = this.page): void {
     this.handleNavigation(page, this.predicate, this.ascending);
+  }
+
+  sortOptionChange($event: any): void {
+    this.selectedSortOption = $event.value;
+  }
+
+  goToFoodDetail(id: string): void {
+    this.router.navigate([`/foods/${id}/detail`]);
+  }
+
+  minusPlusQuantity(isPlus: boolean, id: string ): void {
+    this.foods?.forEach(food=>{
+      if(food.id==id){
+        if(isPlus){
+          food.quantity = food.quantity!+1; 
+        }else{
+          food.quantity = food.quantity!-1;
+          if(food.quantity!<0){
+            food.quantity = 0;
+          }
+        }
+      }
+    })
   }
 
   protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
@@ -88,7 +97,13 @@ export class FoodComponent implements OnInit {
   protected onResponseSuccess(response: EntityArrayResponseType): void {
     this.fillComponentAttributesFromResponseHeader(response.headers);
     const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
-    this.foods = dataFromBody;
+    this.foods = dataFromBody.map(food=>{
+      food.quantity = 0;
+      return food;
+    });
+    // for(let i=0;i<2;i++){
+    //   this.foods.push(...this.foods);
+    // }
   }
 
   protected fillComponentAttributesFromResponseBody(data: IFood[] | null): IFood[] {
@@ -131,4 +146,5 @@ export class FoodComponent implements OnInit {
       return [predicate + ',' + ascendingQueryParam];
     }
   }
+
 }

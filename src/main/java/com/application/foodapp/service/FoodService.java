@@ -84,10 +84,12 @@ public class FoodService {
         log.debug("Request to update Food : {}", foodDTO);
 
         Food oldFood = foodRepository.findById(foodDTO.getId()).get();
-        if(oldFood.getImgName() != null && !oldFood.getImgName().isBlank()){
-            firebaseService.deleteImage(oldFood.getImgName());
-        }
         foodMapper.partialUpdate(oldFood, foodDTO);
+        if((foodDTO.getImgUrl() == null || foodDTO.getImgUrl().isBlank()) && !foodDTO.getImgName().isBlank() ){
+            firebaseService.deleteImage(oldFood.getImgName());
+            oldFood.setImgName("");
+            oldFood.setImgUrl("");
+        }
 
         oldFood = foodRepository.save(oldFood);
         return foodMapper.toDto(oldFood);
@@ -140,8 +142,12 @@ public class FoodService {
      *
      * @param id the id of the entity.
      */
-    public void delete(String id) {
+    public void delete(String id) throws Exception {
         log.debug("Request to delete Food : {}", id);
+        Food food = foodRepository.findById(id).get();
+        if(food.getImgName() != null && !food.getImgName().isBlank()){
+            firebaseService.deleteImage(food.getImgName());
+        }
         foodRepository.deleteById(id);
     }
 }

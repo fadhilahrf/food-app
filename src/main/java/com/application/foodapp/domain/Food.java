@@ -22,6 +22,9 @@ public class Food implements Serializable {
     @Field("name")
     private String name;
 
+    @Field("description")
+    private String description;
+
     @NotNull
     @DecimalMin(value = "0")
     @Field("price")
@@ -59,6 +62,14 @@ public class Food implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Double getPrice() {

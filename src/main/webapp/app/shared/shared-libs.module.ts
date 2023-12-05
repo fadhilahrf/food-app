@@ -7,6 +7,7 @@ import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import { TranslationModule } from "./language/translation.module";
 import { TranslateModule } from "@ngx-translate/core";
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { NgSelectModule } from "@ng-select/ng-select";
 
 @NgModule({
     exports: [
@@ -18,7 +19,8 @@ import { ImageCropperModule } from 'ngx-image-cropper';
       ReactiveFormsModule,
       TranslationModule,
       TranslateModule,
-      ImageCropperModule
+      ImageCropperModule,
+      NgSelectModule
     ],
   })
 export class SharedLibsModule {}
