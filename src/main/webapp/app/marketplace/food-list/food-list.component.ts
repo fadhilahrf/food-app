@@ -1,11 +1,13 @@
-import { HttpHeaders } from '@angular/common/http';
+import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Data, ParamMap, Router } from '@angular/router';
 import { ASC, DEFAULT_SORT_DATA, DESC, SORT } from 'app/config/navigation.constants';
 import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
-import { IFood } from 'app/entities/food/food.model';
+import { IFood, IFoodVM } from 'app/entities/food/food.model';
 import { EntityArrayResponseType, FoodService } from 'app/entities/food/service/food.service';
+import { DataService } from 'app/shared/service/data.service';
 import { Observable, combineLatest, switchMap, tap } from 'rxjs';
+import { MarketplaceService } from '../service/marketpalce.service';
 
 @Component({
   selector: 'jhi-food-list',
@@ -13,7 +15,7 @@ import { Observable, combineLatest, switchMap, tap } from 'rxjs';
   styleUrls: ['./food-list.component.scss']
 })
 export class FoodListComponent implements OnInit {
-  foods?: IFood[];
+  foodVMs?: IFoodVM[];
   isLoading = false;
 
   predicate = 'id';
@@ -32,6 +34,8 @@ export class FoodListComponent implements OnInit {
 
   constructor(
     protected foodService: FoodService,
+    protected dataService: DataService,
+    protected marketplaceService: MarketplaceService,
     protected activatedRoute: ActivatedRoute,
     public router: Router,
     ){}
@@ -42,7 +46,7 @@ export class FoodListComponent implements OnInit {
 
   load(): void {
     this.loadFromBackendWithRouteInformations().subscribe({
-      next: (res: EntityArrayResponseType) => {
+      next: (res: HttpResponse<IFoodVM[]>) => {
         this.onResponseSuccess(res);
       },
     });
@@ -64,22 +68,7 @@ export class FoodListComponent implements OnInit {
     this.router.navigate([`/foods/${id}/detail`]);
   }
 
-  minusPlusQuantity(isPlus: boolean, id: string ): void {
-    this.foods?.forEach(food=>{
-      if(food.id==id){
-        if(isPlus){
-          food.quantity = food.quantity!+1; 
-        }else{
-          food.quantity = food.quantity!-1;
-          if(food.quantity!<0){
-            food.quantity = 0;
-          }
-        }
-      }
-    })
-  }
-
-  protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
+  protected loadFromBackendWithRouteInformations(): Observable<HttpResponse<IFoodVM[]>> {
     return combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
       tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
       switchMap(() => this.queryBackend(this.page, this.predicate, this.ascending)),
@@ -94,19 +83,20 @@ export class FoodListComponent implements OnInit {
     this.ascending = sort[1] === ASC;
   }
 
-  protected onResponseSuccess(response: EntityArrayResponseType): void {
+  protected onResponseSuccess(response: HttpResponse<IFoodVM[]>): void {
     this.fillComponentAttributesFromResponseHeader(response.headers);
     const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
-    this.foods = dataFromBody.map(food=>{
-      food.quantity = 0;
-      return food;
-    });
+    this.foodVMs = dataFromBody;
+    // this.foodVMs = dataFromBody.map(foodVM=>{
+    //   foodVM.orderedQuantity = 0;
+    //   return foodVM;
+    // });
     // for(let i=0;i<2;i++){
     //   this.foods.push(...this.foods);
     // }
   }
 
-  protected fillComponentAttributesFromResponseBody(data: IFood[] | null): IFood[] {
+  protected fillComponentAttributesFromResponseBody(data: IFoodVM[] | null): IFoodVM[] {
     return data ?? [];
   }
 
@@ -114,7 +104,7 @@ export class FoodListComponent implements OnInit {
     this.totalItems = Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER));
   }
 
-  protected queryBackend(page?: number, predicate?: string, ascending?: boolean): Observable<EntityArrayResponseType> {
+  protected queryBackend(page?: number, predicate?: string, ascending?: boolean): Observable<HttpResponse<IFoodVM[]>> {
     this.isLoading = true;
     const pageToLoad: number = page ?? 1;
     const queryObject: any = {
@@ -122,7 +112,7 @@ export class FoodListComponent implements OnInit {
       size: this.itemsPerPage,
       sort: this.getSortQueryParam(predicate, ascending),
     };
-    return this.foodService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
+    return this.foodService.findAllForMarketplace(queryObject).pipe(tap(() => (this.isLoading = false)));
   }
 
   protected handleNavigation(page = this.page, predicate?: string, ascending?: boolean): void {

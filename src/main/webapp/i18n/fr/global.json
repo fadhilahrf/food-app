@@ -8,7 +8,9 @@
       "entities": {
         "main": "Entités",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
-        "food": "Food"
+        "food": "Food",
+        "order": "Order",
+        "orderItem": "Order Item"
       },
       "account": {
         "main": "Compte",

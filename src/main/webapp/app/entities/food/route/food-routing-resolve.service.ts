@@ -4,10 +4,10 @@ import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of, EMPTY, Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IFood } from '../food.model';
+import { IFood, IFoodVM } from '../food.model';
 import { FoodService } from '../service/food.service';
 
-export const foodResolve = (route: ActivatedRouteSnapshot): Observable<null | IFood> => {
+export const FoodResolve = (route: ActivatedRouteSnapshot): Observable<null | IFood> => {
   const id = route.params['id'];
   if (id) {
     return inject(FoodService)
@@ -26,4 +26,21 @@ export const foodResolve = (route: ActivatedRouteSnapshot): Observable<null | IF
   return of(null);
 };
 
-export default foodResolve;
+export const FoodVMResolve = (route: ActivatedRouteSnapshot): Observable<null | IFoodVM> => {
+  const id = route.params['id'];
+  if (id) {
+    return inject(FoodService)
+      .findOneForMarketplace(id)
+      .pipe(
+        mergeMap((foodVM: HttpResponse<IFoodVM>) => {
+          if (foodVM.body) {
+            return of(foodVM.body);
+          } else {
+            inject(Router).navigate(['404']);
+            return EMPTY;
+          }
+        }),
+      );
+  }
+  return of(null);
+}

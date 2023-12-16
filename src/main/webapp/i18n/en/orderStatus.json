@@ -1,0 +1,11 @@
+{
+  "foodApp": {
+    "OrderStatus": {
+      "null": "",
+      "ACTIVE" : "ACTIVE",
+      "COOKING" : "COOKING",
+      "SENDING": "SENDING",
+      "COMPLETED": "COMPLETED"
+    }
+  }
+}

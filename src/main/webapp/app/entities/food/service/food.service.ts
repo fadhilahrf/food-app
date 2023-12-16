@@ -5,7 +5,7 @@ import { Observable, map, of, switchMap } from 'rxjs';
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { IFood, NewFood } from '../food.model';
+import { IFood, IFoodVM, NewFood } from '../food.model';
 
 export type PartialUpdateFood = Partial<IFood> & Pick<IFood, 'id'>;
 
@@ -37,9 +37,18 @@ export class FoodService {
     return this.http.get<IFood>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  findOneForMarketplace(id: string): Observable<HttpResponse<IFoodVM>> {
+    return this.http.get<IFoodVM>(`${this.resourceUrl}/marketplace/${id}`, { observe: 'response' });
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<IFood[]>(this.resourceUrl, { params: options, observe: 'response' });
+  }
+
+  findAllForMarketplace(req?: any): Observable<HttpResponse<IFoodVM[]>> {
+    const options = createRequestOption(req);
+    return this.http.get<IFoodVM[]>(`${this.resourceUrl}/get-all-foods-marketplace`, { params: options, observe: 'response' });
   }
 
   delete(id: string): Observable<HttpResponse<{}>> {

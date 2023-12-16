@@ -1,7 +1,6 @@
 package com.application.foodapp.domain;
 
 import jakarta.validation.constraints.*;
-import java.io.Serializable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -11,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
  */
 @Document(collection = "food")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Food implements Serializable {
+public class Food extends AbstractAuditingEntity<String> {
 
     private static final long serialVersionUID = 1L;
 

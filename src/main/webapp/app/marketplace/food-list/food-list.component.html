@@ -11,27 +11,27 @@
     </div>
   </div>
   <div class="row d-flex justify-content-center">
-      <div class="col-5 my-1" style="width: 13rem;" *ngFor="let food of foods; let i=index;">
+      <div class="col-5 my-1" style="width: 13rem;" *ngFor="let foodVM of foodVMs; let i=index;">
           <div class="card clickable">
-            <div (click)="goToFoodDetail(food.id)">
-              <img class="card-img-top" [src]="food.imgUrl" [alt]="food.name">
+            <div (click)="goToFoodDetail(foodVM.food!.id)">
+              <img class="card-img-top" [src]="foodVM.food!.imgUrl" [alt]="foodVM.food!.name">
               <div class="card-body">
-                <h6 class="card-title">{{ food.name }}</h6>
-                <h5 class="card-title">{{ food.price }}</h5>
-                <p *ngIf="food.description" class="card-text text-description">{{ food.description }}</p>
-                <div *ngIf="!food.description" style="height: 3rem;"></div>
+                <h6 class="card-title">{{ foodVM.food!.name }}</h6>
+                <h5 class="card-title">{{ foodVM.food!.price }}</h5>
+                <p *ngIf="foodVM.food!.description" class="card-text text-description">{{ foodVM.food!.description }}</p>
+                <div *ngIf="!foodVM.food!.description" style="height: 3rem;"></div>
               </div>
             </div>
               <div class="card-footer d-flex justify-content-center">
-                <button class="btn btn-outline-info btn-sm" (click)="minusPlusQuantity(false, food.id)"><fa-icon icon="minus"></fa-icon></button>
-                <button class="btn btn-light" disabled>{{ food.quantity }}</button>
-                <button class="btn btn-outline-info btn-sm" (click)="minusPlusQuantity(true, food.id)"><fa-icon icon="plus"></fa-icon></button>
+                <button class="btn btn-outline-info btn-sm" (click)="marketplaceService.substractFoodQuantity(foodVM!)"><fa-icon icon="minus"></fa-icon></button>
+                <button class="btn btn-light" disabled>{{ foodVM.orderedQuantity! }}</button>
+                <button class="btn btn-outline-info btn-sm" (click)="marketplaceService.addFoodQuantity(foodVM!)"><fa-icon icon="plus"></fa-icon></button>
               </div>
           </div>
       </div>
   </div>
 </div>
-<div *ngIf="foods && foods.length > 0">
+<div *ngIf="foodVMs && foodVMs.length > 0">
     <div class="d-flex justify-content-center">
       <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
     </div>

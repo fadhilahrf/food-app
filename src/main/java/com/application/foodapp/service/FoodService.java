@@ -3,7 +3,10 @@ package com.application.foodapp.service;
 import com.application.foodapp.domain.Food;
 import com.application.foodapp.repository.FoodRepository;
 import com.application.foodapp.service.dto.FoodDTO;
+import com.application.foodapp.service.dto.OrderDTO;
+import com.application.foodapp.service.dto.OrderItemDTO;
 import com.application.foodapp.service.mapper.FoodMapper;
+import com.application.foodapp.web.rest.vm.FoodVM;
 
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -24,6 +27,10 @@ public class FoodService {
 
     private final FoodRepository foodRepository;
 
+    private final OrderService orderService;
+
+    private final OrderItemService orderItemService;
+
     private final FirebaseService firebaseService;
 
     private final FoodMapper foodMapper;
@@ -34,8 +41,10 @@ public class FoodService {
     @Value("${firebase.storage.media-path}")
     private String mediaPath;
 
-    public FoodService(FoodRepository foodRepository, FoodMapper foodMapper, FirebaseService firebaseService) {
+    public FoodService(FoodRepository foodRepository, OrderService orderService, OrderItemService orderItemService, FoodMapper foodMapper, FirebaseService firebaseService) {
         this.foodRepository = foodRepository;
+        this.orderService = orderService;
+        this.orderItemService = orderItemService;
         this.foodMapper = foodMapper;
         this.firebaseService = firebaseService;
     }
@@ -126,6 +135,23 @@ public class FoodService {
         return foodRepository.findAll(pageable).map(foodMapper::toDto);
     }
 
+    public Page<FoodVM> findAllForMarketplace(Pageable pageable) {
+        Optional<OrderDTO> orderOptional = orderService.findFirstByCurrentUserAndStatusIsActive();
+        return foodRepository.findAll(pageable).map(food->{
+            FoodVM foodVM = new FoodVM();
+            foodVM.setFood(foodMapper.toDto(food));
+            foodVM.setOrderedQuantity(0L);
+            if(orderOptional.isPresent()){
+                Optional<OrderItemDTO> orderItemDTO = orderItemService.findOneByOrderIdAndFoodId(orderOptional.get().getId(), food.getId());
+                
+                if(orderItemDTO.isPresent()){
+                    foodVM.setOrderedQuantity(orderItemDTO.get().getQuantity());
+                }
+            }
+            return foodVM;
+        });
+    }
+
     /**
      * Get one food by id.
      *
@@ -135,6 +161,24 @@ public class FoodService {
     public Optional<FoodDTO> findOne(String id) {
         log.debug("Request to get Food : {}", id);
         return foodRepository.findById(id).map(foodMapper::toDto);
+    }
+
+    public Optional<FoodVM> findOneForMarketplace(String id) {
+        log.debug("Request to findOneForMarketplace : {}", id);
+        Optional<OrderDTO> orderOptional = orderService.findFirstByCurrentUserAndStatusIsActive();
+        return foodRepository.findById(id).map(food->{
+            FoodVM foodVM = new FoodVM();
+            foodVM.setFood(foodMapper.toDto(food));
+            foodVM.setOrderedQuantity(0L);
+            if(orderOptional.isPresent()){
+                Optional<OrderItemDTO> orderItemDTO = orderItemService.findOneByOrderIdAndFoodId(orderOptional.get().getId(), food.getId());
+                
+                if(orderItemDTO.isPresent()){
+                    foodVM.setOrderedQuantity(orderItemDTO.get().getQuantity());
+                }
+            }
+            return foodVM;
+        });
     }
 
     /**

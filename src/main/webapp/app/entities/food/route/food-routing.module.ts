@@ -5,8 +5,9 @@ import { ASC } from 'app/config/navigation.constants';
 import { FoodComponent } from '../list/food.component';
 import { FoodDetailComponent } from '../detail/food-detail.component';
 import { FoodUpdateComponent } from '../update/food-update.component';
-import FoodResolve from './food-routing-resolve.service';
+
 import { NgModule } from '@angular/core';
+import { FoodResolve } from './food-routing-resolve.service';
 
 const foodRoute: Routes = [
   {

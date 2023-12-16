@@ -21,7 +21,8 @@
       "name": "Name",
       "description": "Description",
       "price": "Price",
-      "imgUrl": "Image URL"
+      "imgUrl": "Img Url",
+      "orderItem": "Order Item"
     }
   }
 }

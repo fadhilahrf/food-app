@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IFood } from 'app/entities/food/food.model';
+import { BLANK_IMAGE_URL } from 'app/app.constants';
+import { IFood, IFoodVM } from 'app/entities/food/food.model';
+import { FoodService } from 'app/entities/food/service/food.service';
+import { MarketplaceService } from '../service/marketpalce.service';
 
 @Component({
   selector: 'jhi-food-detail',
@@ -8,16 +11,22 @@ import { IFood } from 'app/entities/food/food.model';
   styleUrls: ['./food-detail.component.scss']
 })
 export class FoodDetailComponent implements OnInit{
-  food: IFood | null = null;
+  foodVM: IFoodVM | null = null;
+  BLANK_IMAGE_URL = BLANK_IMAGE_URL;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(protected activatedRoute: ActivatedRoute, protected foodService: FoodService, protected marketplaceService: MarketplaceService) {}
   
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ food }) => {
-      this.food = food;
-      if (food) {
-        this.food = food;
+    this.activatedRoute.data.subscribe(({ foodVM }) => {
+      this.foodVM = foodVM;
+      if (foodVM) {
+        this.foodVM = foodVM;
       }
+    });
+    window.scroll({ 
+      top: 0, 
+      left: 0, 
+      behavior: 'smooth' 
     });
   }
 }

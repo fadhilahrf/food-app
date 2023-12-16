@@ -10,3 +10,8 @@ export interface IFood {
 }
 
 export type NewFood = Omit<IFood, 'id'> & { id: null };
+
+export interface IFoodVM {
+  food?: IFood | null;
+  orderedQuantity?: number | null;
+}

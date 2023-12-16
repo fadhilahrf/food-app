@@ -14,6 +14,8 @@ import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { EntityNavbarItems } from 'app/entities/entity-navbar-items';
 import ActiveMenuDirective from './active-menu.directive';
 import NavbarItem from './navbar-item.model';
+import { DataService } from 'app/shared/service/data.service';
+import { OrderService } from 'app/entities/order/service/order.service';
 
 @Component({
   selector: 'jhi-navbar',
@@ -28,6 +30,7 @@ export default class NavbarComponent implements OnInit {
   version = '';
   account: Account | null = null;
   entitiesNavbarItems: NavbarItem[] = [];
+  totalQuantity = 0;
 
   constructor(
     private loginService: LoginService,
@@ -36,6 +39,8 @@ export default class NavbarComponent implements OnInit {
     private accountService: AccountService,
     private profileService: ProfileService,
     private router: Router,
+    private dataService: DataService,
+    private orderService: OrderService
   ) {
     if (VERSION) {
       this.version = VERSION.toLowerCase().startsWith('v') ? VERSION : `v${VERSION}`;
@@ -52,6 +57,21 @@ export default class NavbarComponent implements OnInit {
     this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
     });
+
+    this.orderService.findByCurrentUserAndStatusIsActive().subscribe(res=>{
+      if(res.body){
+        this.totalQuantity = res.body.totalQuantity!;
+        this.dataService.setQuantity(res.body.totalQuantity);
+      }
+    })
+
+    this.dataService.quantity$.subscribe(res=>{
+      if(res){
+        this.totalQuantity = res;
+      }else{
+        this.totalQuantity = 0;
+      }
+    })
   }
 
   changeLanguage(languageKey: string): void {

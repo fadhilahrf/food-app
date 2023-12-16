@@ -5,7 +5,7 @@ import { ASC } from 'app/config/navigation.constants';
 import { NgModule } from '@angular/core';
 import { FoodListComponent } from '../food-list/food-list.component';
 import { FoodDetailComponent } from '../food-detail/food-detail.component';
-import foodResolve from 'app/entities/food/route/food-routing-resolve.service';
+import { FoodVMResolve } from 'app/entities/food/route/food-routing-resolve.service';
 
 const marketplaceRoute: Routes = [
   {
@@ -23,7 +23,7 @@ const marketplaceRoute: Routes = [
       defaultSort: 'id,' + ASC,
     },
     resolve: {
-      food: foodResolve,
+      foodVM: FoodVMResolve,
     },
     canActivate: [UserRouteAccessService],
   }

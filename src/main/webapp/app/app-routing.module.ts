@@ -39,7 +39,7 @@ import { navbarRoute } from './layouts/navbar/navbar.route';
         navbarRoute,
         ...errorRoute,
       ],
-      { enableTracing: DEBUG_INFO_ENABLED },
+      { enableTracing: DEBUG_INFO_ENABLED, scrollPositionRestoration: 'enabled'  },
     ),
   ],
   exports: [RouterModule],

@@ -4,6 +4,8 @@ import com.application.foodapp.repository.FoodRepository;
 import com.application.foodapp.service.FoodService;
 import com.application.foodapp.service.dto.FoodDTO;
 import com.application.foodapp.web.rest.errors.BadRequestAlertException;
+import com.application.foodapp.web.rest.vm.FoodVM;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
@@ -157,6 +159,14 @@ public class FoodResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+    @GetMapping("/get-all-foods-marketplace")
+    public ResponseEntity<List<FoodVM>> getAllFoodsForMarketplace(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+        log.debug("REST request to get a page of Foods");
+        Page<FoodVM> page = foodService.findAllForMarketplace(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
     /**
      * {@code GET  /foods/:id} : get the "id" food.
      *
@@ -167,6 +177,13 @@ public class FoodResource {
     public ResponseEntity<FoodDTO> getFood(@PathVariable String id) {
         log.debug("REST request to get Food : {}", id);
         Optional<FoodDTO> foodDTO = foodService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(foodDTO);
+    }
+
+    @GetMapping("/marketplace/{id}")
+    public ResponseEntity<FoodVM> getFoodForMarketplace(@PathVariable String id) {
+        log.debug("REST request to get Food : {}", id);
+        Optional<FoodVM> foodDTO = foodService.findOneForMarketplace(id);
         return ResponseUtil.wrapOrNotFound(foodDTO);
     }
 
