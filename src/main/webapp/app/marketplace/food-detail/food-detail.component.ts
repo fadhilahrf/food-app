@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BLANK_IMAGE_URL } from 'app/app.constants';
 import { IFood, IFoodVM } from 'app/entities/food/food.model';
 import { FoodService } from 'app/entities/food/service/food.service';
 import { MarketplaceService } from '../service/marketpalce.service';
+import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/auth/account.model';
 
 @Component({
   selector: 'jhi-food-detail',
@@ -13,15 +15,15 @@ import { MarketplaceService } from '../service/marketpalce.service';
 export class FoodDetailComponent implements OnInit{
   foodVM: IFoodVM | null = null;
   BLANK_IMAGE_URL = BLANK_IMAGE_URL;
-
-  constructor(protected activatedRoute: ActivatedRoute, protected foodService: FoodService, protected marketplaceService: MarketplaceService) {}
+  account: Account | null = null;
+  constructor(protected activatedRoute: ActivatedRoute, protected foodService: FoodService, protected marketplaceService: MarketplaceService, private accountService: AccountService, public router: Router) {}
   
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ foodVM }) => {
       this.foodVM = foodVM;
-      if (foodVM) {
-        this.foodVM = foodVM;
-      }
+    });
+    this.accountService.getAuthenticationState().subscribe(account => {
+      this.account = account;
     });
     window.scroll({ 
       top: 0, 
@@ -29,4 +31,9 @@ export class FoodDetailComponent implements OnInit{
       behavior: 'smooth' 
     });
   }
+
+  navigateToHome(): void {
+    this.router.navigate(['']);
+  }
+
 }

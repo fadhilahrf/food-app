@@ -58,10 +58,10 @@ export default class NavbarComponent implements OnInit {
       this.account = account;
     });
 
-    this.orderService.findByCurrentUserAndStatusIsActive().subscribe(res=>{
+    this.orderService.getTotalQuantity().subscribe(res=>{
       if(res.body){
-        this.totalQuantity = res.body.totalQuantity!;
-        this.dataService.setQuantity(res.body.totalQuantity);
+        this.totalQuantity = res.body!;
+        this.dataService.setQuantity(this.totalQuantity);
       }
     })
 
@@ -90,6 +90,7 @@ export default class NavbarComponent implements OnInit {
   logout(): void {
     this.collapseNavbar();
     this.loginService.logout();
+    this.dataService.setQuantity(0);
     this.router.navigate(['']);
   }
 

@@ -8,6 +8,8 @@ import com.application.foodapp.service.dto.OrderItemDTO;
 import com.application.foodapp.service.mapper.FoodMapper;
 import com.application.foodapp.web.rest.vm.FoodVM;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -150,6 +152,19 @@ public class FoodService {
             }
             return foodVM;
         });
+    }
+
+    public List<FoodVM> findFoodsInUserCart() {
+        Optional<OrderDTO> orderOptional = orderService.findFirstByCurrentUserAndStatusIsActive();
+        if(orderOptional.isPresent()){
+            return orderItemService.findAllByOrderId(orderOptional.get().getId()).stream().map(orderItem->{
+                FoodVM foodVM = new FoodVM();
+                foodVM.setFood(orderItem.getFood());
+                foodVM.setOrderedQuantity(orderItem.getQuantity());
+                return foodVM;
+            }).toList();
+        }
+        return new ArrayList<>();
     }
 
     /**

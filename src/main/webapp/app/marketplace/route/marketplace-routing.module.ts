@@ -5,7 +5,9 @@ import { ASC } from 'app/config/navigation.constants';
 import { NgModule } from '@angular/core';
 import { FoodListComponent } from '../food-list/food-list.component';
 import { FoodDetailComponent } from '../food-detail/food-detail.component';
-import { FoodVMResolve } from 'app/entities/food/route/food-routing-resolve.service';
+import { foodVMResolve } from 'app/entities/food/route/food-routing-resolve.service';
+import { CartComponent } from '../cart/cart.component';
+import { orderCartResolve } from 'app/entities/order/route/order-routing-resolve.service';
 
 const marketplaceRoute: Routes = [
   {
@@ -14,7 +16,7 @@ const marketplaceRoute: Routes = [
     data: {
       defaultSort: 'id,' + ASC,
     },
-    canActivate: [UserRouteAccessService],
+    // canActivate: [UserRouteAccessService],
   },
   {
     path: ':id/detail',
@@ -23,7 +25,18 @@ const marketplaceRoute: Routes = [
       defaultSort: 'id,' + ASC,
     },
     resolve: {
-      foodVM: FoodVMResolve,
+      foodVM: foodVMResolve,
+    },
+    // canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'cart',
+    component: CartComponent,
+    data: {
+      defaultSort: 'id,' + ASC,
+    },
+    resolve: {
+      order: orderCartResolve,
     },
     canActivate: [UserRouteAccessService],
   }

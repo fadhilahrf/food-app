@@ -24,4 +24,6 @@ public interface OrderItemRepository extends MongoRepository<OrderItem, String> 
     Optional<OrderItem> findOneWithEagerRelationships(String id);
     
     Optional<OrderItem> findOneByOrderIdAndFoodId(String orderId, String foodId);
+
+    List<OrderItem> findAllByOrderId(String orderId);
 }

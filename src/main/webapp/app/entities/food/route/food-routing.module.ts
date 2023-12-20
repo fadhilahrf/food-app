@@ -7,7 +7,7 @@ import { FoodDetailComponent } from '../detail/food-detail.component';
 import { FoodUpdateComponent } from '../update/food-update.component';
 
 import { NgModule } from '@angular/core';
-import { FoodResolve } from './food-routing-resolve.service';
+import { foodResolve } from './food-routing-resolve.service';
 
 const foodRoute: Routes = [
   {
@@ -22,7 +22,7 @@ const foodRoute: Routes = [
     path: ':id/view',
     component: FoodDetailComponent,
     resolve: {
-      food: FoodResolve,
+      food: foodResolve,
     },
     canActivate: [UserRouteAccessService],
   },
@@ -30,7 +30,7 @@ const foodRoute: Routes = [
     path: 'new',
     component: FoodUpdateComponent,
     resolve: {
-      food: FoodResolve,
+      food: foodResolve,
     },
     canActivate: [UserRouteAccessService],
   },
@@ -38,7 +38,7 @@ const foodRoute: Routes = [
     path: ':id/edit',
     component: FoodUpdateComponent,
     resolve: {
-      food: FoodResolve,
+      food: foodResolve,
     },
     canActivate: [UserRouteAccessService],
   },

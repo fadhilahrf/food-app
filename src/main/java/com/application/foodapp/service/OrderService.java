@@ -7,8 +7,11 @@ import com.application.foodapp.repository.OrderRepository;
 import com.application.foodapp.repository.UserRepository;
 import com.application.foodapp.security.SecurityUtils;
 import com.application.foodapp.service.dto.OrderDTO;
+import com.application.foodapp.service.dto.OrderItemDTO;
 import com.application.foodapp.service.dto.UserDTO;
 import com.application.foodapp.service.mapper.OrderMapper;
+
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,12 +29,15 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
+    private final OrderItemService orderItemService;
+
     private final UserRepository userRepository;
 
     private final OrderMapper orderMapper;
 
-    public OrderService(OrderRepository orderRepository, UserRepository userRepository, OrderMapper orderMapper) {
+    public OrderService(OrderRepository orderRepository, OrderItemService orderItemService, UserRepository userRepository, OrderMapper orderMapper) {
         this.orderRepository = orderRepository;
+        this.orderItemService = orderItemService;
         this.userRepository = userRepository;
         this.orderMapper = orderMapper;
     }
@@ -127,18 +133,35 @@ public class OrderService {
      */
     public Optional<OrderDTO> findOne(String id) {
         log.debug("Request to get Order : {}", id);
-        return orderRepository.findOneWithEagerRelationships(id).map(orderMapper::toDto);
+        return orderRepository.findOneWithEagerRelationships(id).map(order->{
+            OrderDTO orderDTO = orderMapper.toDto(order);
+
+            List<OrderItemDTO> orderItemDTOs = orderItemService.findAllByOrderId(id);
+
+            orderDTO.setOrderItems(orderItemDTOs);
+            return orderDTO;
+        });
     }
 
     public Optional<OrderDTO> findFirstByCurrentUserAndStatusIsActive() {
         log.debug("Request to findFirstByCurrentUserAndStatusIsActive");
         String login = SecurityUtils.getCurrentUserLogin().get();
-        User user = userRepository.findOneByLogin(login).get();
-        Optional<Order> orderOptional = orderRepository.findFirstByUserAndStatus(user, OrderStatus.ACTIVE);
-        if(orderOptional.isEmpty()){
-            return Optional.empty();
+        Optional<User> userOptional = userRepository.findOneByLogin(login);
+        if(userOptional.isPresent()){
+            Optional<Order> orderOptional = orderRepository.findFirstByUserAndStatus(userOptional.get(), OrderStatus.ACTIVE);
+            if(orderOptional.isEmpty()){
+                return Optional.empty();
+            }
+            return orderOptional.map(order->{
+                OrderDTO orderDTO = orderMapper.toDto(order);
+
+                List<OrderItemDTO> orderItemDTOs = orderItemService.findAllByOrderId(orderDTO.getId());
+
+                orderDTO.setOrderItems(orderItemDTOs);
+                return orderDTO;
+            });
         }
-        return orderOptional.map(orderMapper::toDto);
+        return Optional.empty();
     }
 
     public Long getTotalQuantity() {

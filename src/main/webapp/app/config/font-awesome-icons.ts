@@ -39,7 +39,10 @@ import {
   faWrench,
   faHamburger,
   faMinus,
-  faCartShopping
+  faCartShopping,
+  faEnvelope,
+  faPhone,
+  faPrint
   // jhipster-needle-add-icon-import
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -84,6 +87,9 @@ export const fontAwesomeIcons = [
   faWrench,
   faHamburger,
   faMinus,
-  faCartShopping
+  faCartShopping,
+  faEnvelope,
+  faPhone,
+  faPrint
   // jhipster-needle-add-icon-import
 ];

@@ -6,6 +6,8 @@ import com.application.foodapp.repository.OrderItemRepository;
 import com.application.foodapp.repository.OrderRepository;
 import com.application.foodapp.service.dto.OrderItemDTO;
 import com.application.foodapp.service.mapper.OrderItemMapper;
+
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +51,10 @@ public class OrderItemService {
 
             if(currentOrderItemOptional.get().getId()!=null && orderItem.getQuantity()==0){
                 delete(currentOrderItemOptional.get().getId());
-                return new OrderItemDTO();
+                OrderItemDTO deletedOrderItem = new OrderItemDTO();
+                deletedOrderItem.setId(currentOrderItemOptional.get().getId());
+                deletedOrderItem.setQuantity(0L);
+                return deletedOrderItem;
             }
 
             return update(orderItemDTO, currentOrderItemOptional.get());
@@ -115,6 +120,11 @@ public class OrderItemService {
     public Page<OrderItemDTO> findAll(Pageable pageable) {
         log.debug("Request to get all OrderItems");
         return orderItemRepository.findAll(pageable).map(orderItemMapper::toDto);
+    }
+
+    public List<OrderItemDTO> findAllByOrderId(String id) {
+        log.debug("Request to findAllByOrderId");
+        return orderItemRepository.findAllByOrderId(id).stream().map(orderItemMapper::toDto).toList();
     }
 
     /**

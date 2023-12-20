@@ -182,9 +182,16 @@ public class FoodResource {
 
     @GetMapping("/marketplace/{id}")
     public ResponseEntity<FoodVM> getFoodForMarketplace(@PathVariable String id) {
-        log.debug("REST request to get Food : {}", id);
+        log.debug("REST request to getFoodsForMarketplace : {}", id);
         Optional<FoodVM> foodDTO = foodService.findOneForMarketplace(id);
         return ResponseUtil.wrapOrNotFound(foodDTO);
+    }
+
+    @GetMapping("/cart")
+    public ResponseEntity<List<FoodVM>> getFoodsInUserCart() {
+        log.debug("REST request to getFoodsInUserCart");
+        List<FoodVM> orderedFoods = foodService.findFoodsInUserCart();
+        return ResponseEntity.ok(orderedFoods);
     }
 
     /**

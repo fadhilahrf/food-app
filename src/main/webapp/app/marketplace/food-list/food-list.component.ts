@@ -8,6 +8,8 @@ import { EntityArrayResponseType, FoodService } from 'app/entities/food/service/
 import { DataService } from 'app/shared/service/data.service';
 import { Observable, combineLatest, switchMap, tap } from 'rxjs';
 import { MarketplaceService } from '../service/marketpalce.service';
+import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/auth/account.model';
 
 @Component({
   selector: 'jhi-food-list',
@@ -32,15 +34,21 @@ export class FoodListComponent implements OnInit {
 
   selectedSortOption = 'name';
 
+  account: Account | null = null;
+
   constructor(
     protected foodService: FoodService,
     protected dataService: DataService,
     protected marketplaceService: MarketplaceService,
     protected activatedRoute: ActivatedRoute,
+    private accountService: AccountService,
     public router: Router,
     ){}
 
   ngOnInit(): void {
+    this.accountService.getAuthenticationState().subscribe(account => {
+      this.account = account;
+    });
     this.load();
   }
 
@@ -50,6 +58,10 @@ export class FoodListComponent implements OnInit {
         this.onResponseSuccess(res);
       },
     });
+  }
+
+  navigateToHome(): void {
+    this.router.navigate(['']);
   }
 
   navigateToWithComponentValues(): void {

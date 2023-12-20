@@ -26,4 +26,18 @@ export const orderResolve = (route: ActivatedRouteSnapshot): Observable<null | I
   return of(null);
 };
 
-export default orderResolve;
+export const orderCartResolve = (route: ActivatedRouteSnapshot): Observable<null | IOrder> => {
+  const id = route.params['id'];
+  return inject(OrderService)
+      .findByCurrentUserAndStatusIsActive()
+      .pipe(
+        mergeMap((order: HttpResponse<IOrder>) => {
+          if (order.body) {
+            return of(order.body);
+          } else {
+            inject(Router).navigate(['404']);
+            return EMPTY;
+          }
+        }),
+      );
+};

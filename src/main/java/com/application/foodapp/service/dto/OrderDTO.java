@@ -2,6 +2,8 @@ package com.application.foodapp.service.dto;
 
 import com.application.foodapp.domain.enumeration.OrderStatus;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -15,6 +17,8 @@ public class OrderDTO implements Serializable {
     private OrderStatus status;
 
     private UserDTO user;
+
+    private List<OrderItemDTO> orderItems = new ArrayList<>(); 
 
     private Long totalQuantity;
 
@@ -42,6 +46,14 @@ public class OrderDTO implements Serializable {
 
     public void setUser(UserDTO user) {
         this.user = user;
+    }
+
+    public List<OrderItemDTO> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItemDTO> orderItems) {
+        this.orderItems = orderItems;
     }
 
     public Long getTotalQuantity() {

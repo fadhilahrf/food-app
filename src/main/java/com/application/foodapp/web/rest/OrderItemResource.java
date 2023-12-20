@@ -8,7 +8,6 @@ import com.application.foodapp.service.dto.OrderItemDTO;
 import com.application.foodapp.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
@@ -77,10 +76,7 @@ public class OrderItemResource {
         orderItemDTO.setOrder(orderDTO);
 
         OrderItemDTO result = orderItemService.saveOrUpdate(orderItemDTO);
-        return ResponseEntity
-            .created(new URI("/api/order-items/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId()))
-            .body(result);
+        return ResponseEntity.ok(result);
     }
 
     /**

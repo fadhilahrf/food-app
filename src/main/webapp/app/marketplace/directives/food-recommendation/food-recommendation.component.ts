@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Account } from 'app/core/auth/account.model';
 import { IFood, IFoodVM } from 'app/entities/food/food.model';
 import { FoodService } from 'app/entities/food/service/food.service';
 import { MarketplaceService } from 'app/marketplace/service/marketpalce.service';
@@ -11,6 +12,7 @@ import { tap } from 'rxjs';
   styleUrls: ['./food-recommendation.component.scss']
 })
 export class FoodRecommendationComponent implements OnInit {
+  @Input() account?: Account | null;
   foodVMs?: IFoodVM[];
   isLoading = false;
 
@@ -37,5 +39,9 @@ export class FoodRecommendationComponent implements OnInit {
 
   goToFoodDetail(id: string): void {
     this.router.navigate([`/foods/${id}/detail`]);
+  }
+
+  navigateToHome(): void {
+    this.router.navigate(['']);
   }
 }

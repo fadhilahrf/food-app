@@ -51,6 +51,10 @@ export class FoodService {
     return this.http.get<IFoodVM[]>(`${this.resourceUrl}/get-all-foods-marketplace`, { params: options, observe: 'response' });
   }
 
+  findFoodsIncart(): Observable<HttpResponse<IFoodVM[]>> {
+    return this.http.get<IFoodVM[]>(`${this.resourceUrl}/cart`, { observe: 'response' });
+  }
+
   delete(id: string): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
