@@ -9,5 +9,5 @@ export const HOME_ROUTE: Route = {
   data: {
     pageTitle: 'Welcome, Java Hipster!',
   },
-  canActivate: [UserRouteAccessService],
+  // canActivate: [UserRouteAccessService],
 };

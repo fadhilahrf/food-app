@@ -8,6 +8,7 @@ import { TranslationModule } from "./language/translation.module";
 import { TranslateModule } from "@ngx-translate/core";
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { NgSelectModule } from "@ng-select/ng-select";
+import { NgxPayPalModule } from 'ngx-paypal';
 
 @NgModule({
     exports: [
@@ -20,7 +21,8 @@ import { NgSelectModule } from "@ng-select/ng-select";
       TranslationModule,
       TranslateModule,
       ImageCropperModule,
-      NgSelectModule
+      NgSelectModule,
+      NgxPayPalModule
     ],
   })
 export class SharedLibsModule {}

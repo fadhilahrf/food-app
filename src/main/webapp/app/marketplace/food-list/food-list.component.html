@@ -17,7 +17,7 @@
               <img class="card-img-top" [src]="foodVM.food!.imgUrl" [alt]="foodVM.food!.name">
               <div class="card-body">
                 <h6 class="card-title">{{ foodVM.food!.name }}</h6>
-                <h5 class="card-title">{{ foodVM.food!.price }}</h5>
+                <h5 class="card-title">${{ foodVM.food!.price }} USD</h5>
                 <p *ngIf="foodVM.food!.description" class="card-text text-description">{{ foodVM.food!.description }}</p>
                 <div *ngIf="!foodVM.food!.description" style="height: 3rem;"></div>
               </div>

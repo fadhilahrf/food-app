@@ -5,6 +5,8 @@ import { Router, RouterModule } from '@angular/router';
 import SharedModule from 'app/shared/shared.module';
 import { LoginService } from 'app/login/login.service';
 import { AccountService } from 'app/core/auth/account.service';
+import { DataService } from 'app/shared/service/data.service';
+import { OrderService } from 'app/entities/order/service/order.service';
 
 @Component({
   selector: 'jhi-login',
@@ -26,6 +28,8 @@ export default class LoginComponent implements OnInit, AfterViewInit {
     private accountService: AccountService,
     private loginService: LoginService,
     private router: Router,
+    private dataService: DataService,
+    private orderService: OrderService
   ) {}
 
   ngOnInit(): void {
@@ -47,6 +51,11 @@ export default class LoginComponent implements OnInit, AfterViewInit {
         this.authenticationError = false;
         if (!this.router.getCurrentNavigation()) {
           // There were no routing during login (eg from navigationToStoredUrl)
+          this.orderService.getTotalQuantity().subscribe(res=>{
+            if(res.body){
+              this.dataService.setQuantity(res.body);
+            }
+          })
           this.router.navigate(['']);
         }
       },

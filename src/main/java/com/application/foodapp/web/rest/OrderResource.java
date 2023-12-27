@@ -138,6 +138,15 @@ public class OrderResource {
         );
     }
 
+    @PatchMapping(value = "/status")
+    public ResponseEntity<OrderDTO> setCurrentOrderStatus(@RequestBody String orderStatus ) {
+        log.debug("REST request to setCurrentOrderStatus : {}", orderStatus);
+        
+        OrderDTO result = orderService.setCurrentOrderStatus(OrderStatus.valueOf(orderStatus));
+
+        return ResponseEntity.ok(result);
+    }
+
     /**
      * {@code GET  /orders} : get all the orders.
      *

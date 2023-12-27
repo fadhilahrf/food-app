@@ -150,7 +150,7 @@ public class OrderService {
         if(userOptional.isPresent()){
             Optional<Order> orderOptional = orderRepository.findFirstByUserAndStatus(userOptional.get(), OrderStatus.ACTIVE);
             if(orderOptional.isEmpty()){
-                return Optional.empty();
+                return Optional.of(createNewWithCurrentUser());
             }
             return orderOptional.map(order->{
                 OrderDTO orderDTO = orderMapper.toDto(order);
@@ -173,6 +173,20 @@ public class OrderService {
 
         return 0L;
     }
+
+    public OrderDTO setCurrentOrderStatus(OrderStatus orderStatus) {
+        Optional<OrderDTO> orderOptional = findFirstByCurrentUserAndStatusIsActive();
+
+        if(orderOptional.isPresent()){
+            OrderDTO orderDTO = orderOptional.get();
+            Order order = orderMapper.toEntity(orderDTO);
+            order.setStatus(orderStatus);
+            return orderMapper.toDto(orderRepository.save(order));
+        }
+
+        return new OrderDTO();
+    }
+
     /**
      * Delete the order by id.
      *

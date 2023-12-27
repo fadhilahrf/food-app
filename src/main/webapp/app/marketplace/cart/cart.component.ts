@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MarketplaceService } from '../service/marketpalce.service';
 import { OrderService } from 'app/entities/order/service/order.service';
 import { IOrder } from 'app/entities/order/order.model';
@@ -8,6 +8,8 @@ import { IFoodVM } from 'app/entities/food/food.model';
 import { IOrderItem } from 'app/entities/order-item/order-item.model';
 import { DataService } from 'app/shared/service/data.service';
 import { OrderItemService } from 'app/entities/order-item/service/order-item.service';
+import { IPayPalConfig, ICreateOrderRequest } from 'ngx-paypal';
+import { OrderStatus } from 'app/entities/enumerations/order-status.model';
 
 @Component({
   selector: 'jhi-cart',
@@ -18,15 +20,68 @@ export class CartComponent implements OnInit {
 
   order?: IOrder | null;
   foodVms?: IFoodVM[] | [];
-  SHIPPING_COST = 5000;
-
-  constructor(protected activatedRoute: ActivatedRoute, protected orderService: OrderService, protected orderItemService: OrderItemService, protected foodService: FoodService, protected marketplaceService: MarketplaceService, protected dataService: DataService) {}
+  SHIPPING_COST = 5;
+  payPalConfig ? : IPayPalConfig;
+  showSuccess = false;
+  showCancel = false;
+  showError = false;
+  constructor(protected activatedRoute: ActivatedRoute, protected router: Router, protected orderService: OrderService, protected orderItemService: OrderItemService, protected foodService: FoodService, protected marketplaceService: MarketplaceService, protected dataService: DataService) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ order }) => {
       this.order = order;
+      this.initConfig();
     });
   }
+  
+  private initConfig(): void {
+    this.payPalConfig = {
+        currency: 'USD',
+        clientId: 'sb',
+        createOrderOnClient: (data) => < ICreateOrderRequest > {
+            intent: 'CAPTURE',
+            purchase_units: [{
+                amount: {
+                    currency_code: 'USD',
+                    value: String(this.order?.totalPrice!+this.SHIPPING_COST),
+                    breakdown: {
+                        item_total: {
+                            currency_code: 'USD',
+                            value: String(this.order?.totalPrice!+this.SHIPPING_COST)
+                        }
+                    }
+                },
+                items: []
+            }]
+        },
+        advanced: {
+            commit: 'true'
+        },
+        style: {
+            label: 'paypal',
+            layout: 'vertical'
+        },
+        onApprove: (data, actions) => {
+        },
+        onClientAuthorization: (data) => {
+          this.orderService.setCurrentOrderStatus(OrderStatus.COOKING).subscribe(res=>{
+            this.showSuccess = true;
+            this.dataService.setQuantity(0);
+            this.router.navigate(['/foods']);
+          });
+
+        },
+        onCancel: (data, actions) => {
+            this.showCancel = true;
+
+        },
+        onError: err => {
+            this.showError = true;
+        },
+        onClick: (data, actions) => {
+        }
+    };
+}
 
   addOrderItemQuantity(orderItem: IOrderItem): void {
     this.marketplaceService.addOrderItemQuantity(orderItem).subscribe(res=>{

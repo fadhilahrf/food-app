@@ -6,6 +6,7 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IOrder, NewOrder } from '../order.model';
+import { OrderStatus } from 'app/entities/enumerations/order-status.model';
 
 export type PartialUpdateOrder = Partial<IOrder> & Pick<IOrder, 'id'>;
 
@@ -31,6 +32,10 @@ export class OrderService {
 
   partialUpdate(order: PartialUpdateOrder): Observable<EntityResponseType> {
     return this.http.patch<IOrder>(`${this.resourceUrl}/${this.getOrderIdentifier(order)}`, order, { observe: 'response' });
+  }
+
+  setCurrentOrderStatus(orderStatus: String): Observable<EntityResponseType> {
+    return this.http.patch<IOrder>(`${this.resourceUrl}/status`, orderStatus, { observe: 'response' });
   }
 
   find(id: string): Observable<EntityResponseType> {
