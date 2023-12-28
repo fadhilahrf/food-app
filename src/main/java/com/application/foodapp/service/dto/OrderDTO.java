@@ -24,6 +24,8 @@ public class OrderDTO implements Serializable {
 
     private Double totalPrice;
 
+    private Double shippingCost;
+
     public String getId() {
         return id;
     }
@@ -72,6 +74,13 @@ public class OrderDTO implements Serializable {
         this.totalPrice = totalPrice;
     }
 
+    public Double getShippingCost() {
+        return shippingCost;
+    }
+
+    public void setShippingCost(Double shippingCost) {
+        this.shippingCost = shippingCost;
+    }
 
     @Override
     public boolean equals(Object o) {

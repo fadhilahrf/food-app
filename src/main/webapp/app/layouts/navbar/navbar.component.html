@@ -144,7 +144,7 @@
           </ul>
         </li>
         <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <a class="nav-link" routerLink="/foods/cart" (click)="collapseNavbar()">
+          <a class="nav-link" routerLink="/cart" (click)="collapseNavbar()">
             <div class="shopping-cart">
               <fa-icon icon="cart-shopping"></fa-icon>
               <span class='shopping-item bg-info'><small>{{ totalQuantity }}</small> </span>
@@ -168,6 +168,18 @@
             </span>
           </a>
           <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="account-menu">
+            <li *ngSwitchCase="true">
+              <a
+                class="dropdown-item"
+                routerLink="/orders"
+                routerLinkActive="active"
+                (click)="collapseNavbar()"
+                data-cy="settings"
+              >
+                <fa-icon icon="shopping-cart" [fixedWidth]="true"></fa-icon>
+                <span>My Orders</span>
+              </a>
+            </li>
             <li *ngSwitchCase="true">
               <a
                 class="dropdown-item"

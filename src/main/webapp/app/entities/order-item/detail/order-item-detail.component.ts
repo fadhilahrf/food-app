@@ -15,9 +15,6 @@ export class OrderItemDetailComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ orderItem }) => {
       this.orderItem = orderItem;
-      if (orderItem) {
-        this.orderItem = orderItem;
-      }
     });
   }
 

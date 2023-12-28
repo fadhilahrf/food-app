@@ -1,0 +1,16 @@
+<div class="vh-100 d-flex justify-content-center align-items-center">
+    <div class="card col-md-4 bg-white shadow-md p-5">
+        <ng-container [ngSwitch]="status">
+            <div *ngSwitchCase="PAYMENT_STATUS.SUCCESS" class="mb-4 text-center text-success">
+                <fa-icon icon="check-circle" [size]="'4x'"></fa-icon>
+            </div>
+            <div *ngSwitchCase="PAYMENT_STATUS.FAILED" class="mb-4 text-center text-danger">
+                <fa-icon icon="xmark-circle" [size]="'4x'"></fa-icon>
+            </div>
+        </ng-container>
+        <div class="text-center">
+            <h1 class="fw-bold text-uppercase "> Payment {{ status }}</h1>
+            <a class="btn btn-outline-success mt-2" [routerLink]="['']">Back Home</a>
+        </div>
+    </div>
+</div>

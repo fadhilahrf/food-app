@@ -42,7 +42,9 @@ import {
   faCartShopping,
   faEnvelope,
   faPhone,
-  faPrint
+  faPrint,
+  faCheckCircle,
+  faXmarkCircle
   // jhipster-needle-add-icon-import
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -90,6 +92,8 @@ export const fontAwesomeIcons = [
   faCartShopping,
   faEnvelope,
   faPhone,
-  faPrint
+  faPrint,
+  faCheckCircle,
+  faXmarkCircle
   // jhipster-needle-add-icon-import
 ];

@@ -9,6 +9,7 @@ export interface IOrder {
   orderItems?: IOrderItem[] | null;
   totalQuantity?: number | null;
   totalPrice?: number | null;
+  shippingCost?: number | null;
 }
 
 export type NewOrder = Omit<IOrder, 'id'> & { id: null };

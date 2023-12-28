@@ -2,13 +2,13 @@ import { inject } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of, EMPTY, Observable } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { catchError, mergeMap } from 'rxjs/operators';
 
 import { IFood, IFoodVM } from '../food.model';
 import { FoodService } from '../service/food.service';
-
 export const foodResolve = (route: ActivatedRouteSnapshot): Observable<null | IFood> => {
   const id = route.params['id'];
+  const router = inject(Router);
   if (id) {
     return inject(FoodService)
       .find(id)
@@ -17,10 +17,14 @@ export const foodResolve = (route: ActivatedRouteSnapshot): Observable<null | IF
           if (food.body) {
             return of(food.body);
           } else {
-            inject(Router).navigate(['404']);
+            router.navigate(['404']);
             return EMPTY;
           }
         }),
+        catchError((error) => {
+          router.navigate(['404']);
+          return of(null);
+        })
       );
   }
   return of(null);
@@ -28,6 +32,7 @@ export const foodResolve = (route: ActivatedRouteSnapshot): Observable<null | IF
 
 export const foodVMResolve = (route: ActivatedRouteSnapshot): Observable<null | IFoodVM> => {
   const id = route.params['id'];
+  const router = inject(Router);
   if (id) {
     return inject(FoodService)
       .findOneForMarketplace(id)
@@ -36,10 +41,14 @@ export const foodVMResolve = (route: ActivatedRouteSnapshot): Observable<null | 
           if (foodVM.body) {
             return of(foodVM.body);
           } else {
-            inject(Router).navigate(['404']);
+            router.navigate(['404']);
             return EMPTY;
           }
         }),
+        catchError((error) => {
+          router.navigate(['404']);
+          return of(null);
+        })
       );
   }
   return of(null);

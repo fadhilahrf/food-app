@@ -42,8 +42,17 @@ export class OrderService {
     return this.http.get<IOrder>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  findWithAuthorizedUser(id: string): Observable<EntityResponseType> {
+    return this.http.get<IOrder>(`${this.resourceUrl}/${id}/current-user`, { observe: 'response' });
+  }
+
   findByCurrentUserAndStatusIsActive(): Observable<EntityResponseType> {
     return this.http.get<IOrder>(`${this.resourceUrl}/active-order-by-current-user`, { observe: 'response' });
+  }
+
+  findAllByCurrentUser(req?: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http.get<IOrder[]>(`${this.resourceUrl}/current-user`, { params: options, observe: 'response' });
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {

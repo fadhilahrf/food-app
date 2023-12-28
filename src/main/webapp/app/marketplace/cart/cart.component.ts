@@ -10,6 +10,7 @@ import { DataService } from 'app/shared/service/data.service';
 import { OrderItemService } from 'app/entities/order-item/service/order-item.service';
 import { IPayPalConfig, ICreateOrderRequest } from 'ngx-paypal';
 import { OrderStatus } from 'app/entities/enumerations/order-status.model';
+import { PAYMENT_STATUS, SHIPPING_COST } from 'app/app.constants';
 
 @Component({
   selector: 'jhi-cart',
@@ -20,7 +21,7 @@ export class CartComponent implements OnInit {
 
   order?: IOrder | null;
   foodVms?: IFoodVM[] | [];
-  SHIPPING_COST = 5;
+  SHIPPING_COST = SHIPPING_COST;
   payPalConfig ? : IPayPalConfig;
   showSuccess = false;
   showCancel = false;
@@ -64,19 +65,24 @@ export class CartComponent implements OnInit {
         onApprove: (data, actions) => {
         },
         onClientAuthorization: (data) => {
-          this.orderService.setCurrentOrderStatus(OrderStatus.COOKING).subscribe(res=>{
-            this.showSuccess = true;
-            this.dataService.setQuantity(0);
-            this.router.navigate(['/foods']);
-          });
-
+          this.order!.status = OrderStatus.COOKING;
+          this.order!.shippingCost = SHIPPING_COST;
+          this.orderService.update(this.order!).subscribe(res=>{
+              this.showSuccess = true;
+              this.dataService.setQuantity(0);
+              this.router.navigate(['/payment-status'], { queryParams: {
+                status: PAYMENT_STATUS.SUCCESS
+              }});
+            });
         },
         onCancel: (data, actions) => {
             this.showCancel = true;
-
         },
         onError: err => {
             this.showError = true;
+            this.router.navigate(['/payment-status'], { queryParams: {
+              status: PAYMENT_STATUS.FAILED
+            }});
         },
         onClick: (data, actions) => {
         }

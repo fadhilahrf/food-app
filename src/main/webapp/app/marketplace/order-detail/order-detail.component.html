@@ -1,0 +1,67 @@
+<div class="container p-3">
+    <div class="row">
+        <div class="col-6">
+            <div class="row mb-3 d-flex justify-content-end" *ngFor="let orderItem of order?.orderItems">
+                <div class="card w-75">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <img class="w-100" [src]="orderItem.food!.imgUrl" [alt]="orderItem.food!.name">
+                            </div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h4 class="card-title"><a class="text-decoration-none text-black" [routerLink]="['/foods', orderItem.food!.id, 'detail']">{{ orderItem.food?.name }}</a></h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <p class="card-text">Quantity</p>
+                                    </div>
+                                    <div class="col-6 d-flex justify-content-end">
+                                        <b class="card-text justify-content-end">{{ orderItem.quantity }}</b>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <p class="card-text">Price</p>
+                                    </div>
+                                    <div class="col-6 d-flex justify-content-end">
+                                        <b class="card-text justify-content-end">{{ orderItem.food?.price }}</b>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                       <h5> <b class="card-text">Total price : </b></h5>
+                                    </div>
+                                    <div class="col-6 d-flex justify-content-end">
+                                        <h5><b class="card-text">${{ orderItem.price }} USD</b></h5>
+                                    </div>
+                                </div>   
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="w-75">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="d-flex justify-content-center mb-4"><b>Order Summary</b></h4>
+                        <div class="row">
+                            <div class="col-6">Subtotal</div>
+                            <div class="col-6 d-flex justify-content-end"><b class="font-weight-bold">${{ order?.totalPrice ? order?.totalPrice : 0 }} USD</b></div>
+                            <div class="col-6">Shipping</div>
+                            <div class="col-6 d-flex justify-content-end"><b class="font-weight-bold">${{ order?.shippingCost ? order?.shippingCost : 0 }} USD</b></div>
+                            <div class="col-12"><hr /></div>
+                            <div class="col-6"><h5><b class="card-text">Total</b></h5></div>
+                            <div class="col-6 d-flex justify-content-end"><h5><b class="card-text">${{ order?.totalPrice!+order?.shippingCost! }} USD</b></h5></div>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,13 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
-
-import { IOrder } from '../order.model';
+import { ActivatedRoute } from '@angular/router';
+import { IOrder } from 'app/entities/order/order.model';
 
 @Component({
   selector: 'jhi-order-detail',
-  templateUrl: './order-detail.component.html'
+  templateUrl: './order-detail.component.html',
+  styleUrls: ['./order-detail.component.scss']
 })
-export class OrderDetailComponent implements OnInit {
+export class OrderDetailComponent implements OnInit{
   @Input() order: IOrder | null = null;
 
   constructor(protected activatedRoute: ActivatedRoute) {}

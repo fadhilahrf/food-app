@@ -9,3 +9,10 @@ export const VERSION = __VERSION__;
 export const DEBUG_INFO_ENABLED = __DEBUG_INFO_ENABLED__;
 
 export const BLANK_IMAGE_URL = 'content/images/blank.png';
+
+export const SHIPPING_COST = 5;
+
+export class PAYMENT_STATUS {
+    static SUCCESS = 'success';
+    static FAILED = 'failed'; 
+}

@@ -2,13 +2,14 @@ import { inject } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of, EMPTY, Observable } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { catchError, mergeMap } from 'rxjs/operators';
 
 import { IOrder } from '../order.model';
 import { OrderService } from '../service/order.service';
 
 export const orderResolve = (route: ActivatedRouteSnapshot): Observable<null | IOrder> => {
   const id = route.params['id'];
+  const router = inject(Router);
   if (id) {
     return inject(OrderService)
       .find(id)
@@ -17,7 +18,7 @@ export const orderResolve = (route: ActivatedRouteSnapshot): Observable<null | I
           if (order.body) {
             return of(order.body);
           } else {
-            inject(Router).navigate(['404']);
+            router.navigate(['404']);
             return EMPTY;
           }
         }),
@@ -26,8 +27,33 @@ export const orderResolve = (route: ActivatedRouteSnapshot): Observable<null | I
   return of(null);
 };
 
+export const orderWithAuthorizedUserResolve = (route: ActivatedRouteSnapshot): Observable<null | IOrder> => {
+  const id = route.params['id'];
+  const router = inject(Router);
+  if (id) {
+    return inject(OrderService)
+      .findWithAuthorizedUser(id)
+      .pipe(
+        mergeMap((order: HttpResponse<IOrder>) => {
+          if (order.body) {
+            return of(order.body);
+          } else {
+            router.navigate(['404']);
+            return EMPTY;
+          }
+        }),
+        catchError((error) => {
+          router.navigate(['404']);
+          return of(null);
+        })
+      );
+  }
+  return of(null);
+};
+
 export const orderCartResolve = (route: ActivatedRouteSnapshot): Observable<null | IOrder> => {
   const id = route.params['id'];
+  const router = inject(Router);
   return inject(OrderService)
       .findByCurrentUserAndStatusIsActive()
       .pipe(
@@ -35,9 +61,13 @@ export const orderCartResolve = (route: ActivatedRouteSnapshot): Observable<null
           if (order.body) {
             return of(order.body);
           } else {
-            inject(Router).navigate(['404']);
+            router.navigate(['404']);
             return EMPTY;
           }
         }),
+        catchError((error) => {
+          router.navigate(['404']);
+          return of(null);
+        })
       );
 };

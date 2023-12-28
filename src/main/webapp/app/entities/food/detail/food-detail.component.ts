@@ -18,9 +18,6 @@ export class FoodDetailComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ food }) => {
       this.food = food;
-      if (food) {
-        this.food = food;
-      }
     });
   }
 

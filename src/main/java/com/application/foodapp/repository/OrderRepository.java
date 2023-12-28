@@ -27,4 +27,6 @@ public interface OrderRepository extends MongoRepository<Order, String> {
     Optional<Order> findOneWithEagerRelationships(String id);
 
     Optional<Order> findFirstByUserAndStatus(User user, OrderStatus status);
+    
+    Page<Order> findAllByUser(User user, Pageable pageable);
 }

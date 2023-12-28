@@ -169,6 +169,17 @@ public class OrderResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
+
+    @GetMapping("/current-user")
+    public ResponseEntity<List<OrderDTO>> getAllOrdersByCurrentUser(
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable,
+        @RequestParam(required = false, defaultValue = "true") boolean eagerload
+    ) {
+        log.debug("REST request to get a page of Orders");
+        Page<OrderDTO> page = orderService.findAllByCurrentUser(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent().stream().filter(order->!order.getStatus().equals(OrderStatus.ACTIVE)).toList());
+    }
     
     /**
      * {@code GET  /orders/:id} : get the "id" order.
@@ -180,6 +191,13 @@ public class OrderResource {
     public ResponseEntity<OrderDTO> getOrder(@PathVariable String id) {
         log.debug("REST request to get Order : {}", id);
         Optional<OrderDTO> orderDTO = orderService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(orderDTO);
+    }
+
+        @GetMapping("/{id}/current-user")
+    public ResponseEntity<OrderDTO> getOrderWithCurrentUser(@PathVariable String id) {
+        log.debug("REST request to get Order : {}", id);
+        Optional<OrderDTO> orderDTO = orderService.findOneWithAuthorizedUser(id);
         return ResponseUtil.wrapOrNotFound(orderDTO);
     }
 

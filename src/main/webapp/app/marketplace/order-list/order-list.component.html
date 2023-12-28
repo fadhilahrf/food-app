@@ -1,0 +1,104 @@
+<div class="container">
+    <h2 id="page-heading" data-cy="OrderHeading">
+      <span jhiTranslate="foodApp.order.home.title">Orders</span>
+  
+      <div class="d-flex justify-content-end">
+        <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+          <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+          <span jhiTranslate="foodApp.order.home.refreshListLabel">Refresh list</span>
+        </button>
+      </div>
+    </h2>
+  
+    <jhi-alert-error></jhi-alert-error>
+  
+    <jhi-alert></jhi-alert>
+  
+    <div class="alert alert-warning" id="no-result" *ngIf="orders?.length === 0">
+      <span jhiTranslate="foodApp.order.home.notFound">No Orders found</span>
+    </div>
+  
+    <div class="table-responsive table-entities" id="entities" *ngIf="orders && orders.length > 0">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="status">
+              <div class="d-flex">
+                <span jhiTranslate="foodApp.order.status">Status</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="totalQuantity">
+              <div class="d-flex">
+                <span jhiTranslate="foodApp.order.totalQuantity">Total Quantity</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="totalPrice">
+              <div class="d-flex">
+                <span jhiTranslate="foodApp.order.totalPrice">Total Price</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="shippingCost">
+              <div class="d-flex">
+                <span>Shipping Cost</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of orders" data-cy="entityTable">
+            <td>
+              <b>{{ order.id }}</b>  
+            </td>
+            <td jhiTranslate="{{ 'foodApp.OrderStatus.' + order.status }}">{{ order.status }}</td>
+            <td>
+              {{ order.totalQuantity }}
+            </td>
+            <td>
+              {{ order.totalPrice }}
+            </td>
+            <td>
+              {{ order.shippingCost ? order.shippingCost : 0 }}
+            </td>
+            <td>
+              <div class="btn-group">
+                <a [routerLink]="['/orders', order.id, 'detail']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                  <fa-icon icon="eye"></fa-icon>
+                  <span class="d-none d-md-inline">Detail</span>
+                </a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <div *ngIf="orders && orders.length > 0">
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+      </div>
+  
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  </div>
+  

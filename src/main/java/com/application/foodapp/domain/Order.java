@@ -36,6 +36,10 @@ public class Order extends AbstractAuditingEntity<String> {
     @Field("total_price")
     private Double totalPrice;
 
+    @DecimalMin(value = "0")
+    @Field("shipping_cost")
+    private Double shippingCost;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public String getId() {
@@ -93,6 +97,13 @@ public class Order extends AbstractAuditingEntity<String> {
         this.totalPrice = totalPrice;
     }
 
+    public Double getShippingCost() {
+        return shippingCost;
+    }
+
+    public void setShippingCost(Double shippingCost) {
+        this.shippingCost = shippingCost;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override

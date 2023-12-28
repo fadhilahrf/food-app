@@ -143,6 +143,27 @@ public class OrderService {
         });
     }
 
+        public Optional<OrderDTO> findOneWithAuthorizedUser(String id) {
+        log.debug("Request to findOneWithAuthorizedUser : {}", id);
+        String login = SecurityUtils.getCurrentUserLogin().get();
+        Optional<User> userOptional = userRepository.findOneByLogin(login);
+        if(userOptional.isPresent()){
+            Optional<Order> orderOptional =  orderRepository.findOneWithEagerRelationships(id);
+            if(userOptional.get().equals(orderOptional.get().getUser())){
+                return orderOptional.map(order->{
+                    OrderDTO orderDTO = orderMapper.toDto(order);
+
+                    List<OrderItemDTO> orderItemDTOs = orderItemService.findAllByOrderId(id);
+
+                    orderDTO.setOrderItems(orderItemDTOs);
+                    return orderDTO;
+                });                
+            }
+        }
+        
+        return Optional.empty();
+    }
+
     public Optional<OrderDTO> findFirstByCurrentUserAndStatusIsActive() {
         log.debug("Request to findFirstByCurrentUserAndStatusIsActive");
         String login = SecurityUtils.getCurrentUserLogin().get();
@@ -185,6 +206,17 @@ public class OrderService {
         }
 
         return new OrderDTO();
+    }
+
+    public Page<OrderDTO> findAllByCurrentUser(Pageable pageable) {
+        log.debug("Request to findAllByCurrentUser");
+        String login = SecurityUtils.getCurrentUserLogin().get();
+        Optional<User> userOptional = userRepository.findOneByLogin(login);
+
+        if(userOptional.isPresent()){
+            return orderRepository.findAllByUser(userOptional.get(), pageable).map(orderMapper::toDto);
+        }
+        return Page.empty();
     }
 
     /**
