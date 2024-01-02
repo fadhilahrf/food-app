@@ -4,6 +4,7 @@
             <img [src]="foodVM!.food!.imgUrl ? foodVM!.food!.imgUrl : BLANK_IMAGE_URL" class="img-detail" />
         </div>
         <div class="col-md-4 my-2 my-md-0">
+            <h3 [ngClass]="foodVM!.food!.category===Category.FOOD ? 'badge bg-primary':'badge bg-info'">{{ foodVM!.food!.category }}</h3>
             <h2 class="fw-bold"> {{ foodVM!.food!.name }}</h2>
             <h1 class="fw-bold">${{ foodVM!.food!.price }} USD</h1>
             <div class="card" style="width: 100%;">
@@ -29,8 +30,8 @@
     <div class="row mt-5">
         <div class="col d-flex justify-content-between">
             <h3 class="fw-bold">Other foods</h3>
-            <a [routerLink]="['/foods']" class="text-decoration-none"><h4 class="fw-bold text-primary">See all</h4></a>
+            <a [routerLink]="['/foods']" [queryParams]="{ page: startPage, size: itemsPerPage, sort: defaultSort ,category: foodVM!.food!.category }" class="text-decoration-none"><h4 class="fw-bold text-primary">See all</h4></a>
         </div>
-        <food-recommendation [account]="account"></food-recommendation>
+        <food-recommendation [account]="account" [category]="foodVM!.food!.category"></food-recommendation>
     </div>
 </div>

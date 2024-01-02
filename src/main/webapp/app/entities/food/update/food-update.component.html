@@ -24,6 +24,22 @@
         </div>
 
         <div class="mb-3">
+          <label class="form-label" jhiTranslate="foodApp.food.category" for="field_category">Category</label>
+          <div class="form-check">
+            <input type="radio" class="form-check-input" id="category1" [value]="Category.FOOD" formControlName="category" />
+            <label class="form-check-label" for="category1">
+              {{ Category.FOOD }}
+            </label>
+          </div>
+          <div class="form-check">
+            <input type="radio" class="form-check-input" id="category2" [value]="Category.BEVERAGE" formControlName="category" />
+            <label class="form-check-label" for="category2">
+              {{ Category.BEVERAGE }}
+            </label>
+          </div>
+        </div>
+
+        <div class="mb-3">
           <label class="form-label" jhiTranslate="foodApp.food.description" for="field_description">Description</label>
           <input type="text" class="form-control" name="description" id="field_description" data-cy="description" formControlName="description" />
         </div>

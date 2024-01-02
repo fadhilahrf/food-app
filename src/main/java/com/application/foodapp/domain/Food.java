@@ -5,6 +5,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import com.application.foodapp.domain.enumeration.Category;
+
 /**
  * A Food.
  */
@@ -20,6 +22,9 @@ public class Food extends AbstractAuditingEntity<String> {
     @NotNull
     @Field("name")
     private String name;
+
+    @Field("category")
+    private Category category;
 
     @Field("description")
     private String description;
@@ -61,6 +66,14 @@ public class Food extends AbstractAuditingEntity<String> {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getDescription() {

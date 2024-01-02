@@ -4,6 +4,8 @@ import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+import com.application.foodapp.domain.enumeration.Category;
+
 /**
  * A DTO for the {@link com.application.foodapp.domain.Food} entity.
  */
@@ -14,6 +16,9 @@ public class FoodDTO implements Serializable {
 
     @NotNull
     private String name;
+
+    @NotNull
+    private Category category;
 
     private String description;
 
@@ -41,6 +46,14 @@ public class FoodDTO implements Serializable {
         this.name = name;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -48,7 +61,6 @@ public class FoodDTO implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-
 
     public Double getPrice() {
         return price;

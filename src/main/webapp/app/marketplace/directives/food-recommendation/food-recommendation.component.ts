@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Account } from 'app/core/auth/account.model';
+import { Category } from 'app/entities/enumerations/category.model';
 import { IFood, IFoodVM } from 'app/entities/food/food.model';
 import { FoodService } from 'app/entities/food/service/food.service';
 import { MarketplaceService } from 'app/marketplace/service/marketpalce.service';
@@ -13,9 +14,11 @@ import { tap } from 'rxjs';
 })
 export class FoodRecommendationComponent implements OnInit {
   @Input() account?: Account | null;
+  @Input() category?: String | null;
   foodVMs?: IFoodVM[];
   isLoading = false;
-
+  Category = Category;
+  
   constructor(protected foodService: FoodService, protected marketplaceService: MarketplaceService, public router: Router){}
 
   ngOnInit(): void {
@@ -28,6 +31,7 @@ export class FoodRecommendationComponent implements OnInit {
       page: 0,
       size: 10,
       sort: ['id','asc'],
+      category: this.category
     };
     this.foodService.findAllForMarketplace(queryObject).subscribe(res=>{
       if(res.body){

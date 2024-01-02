@@ -1,13 +1,31 @@
 <div class="container">
   <div class="row my-2">
-    <div class="col d-flex">
+    <div class="col-4 d-flex">
       <div ngbDropdown class="d-inline-block">
         <b>Sort By</b> <button type="button" class="btn btn-outline-primary" id="sortMenu" ngbDropdownToggle>{{selectedSortOption}}</button>
         <div ngbDropdownMenu  aria-labelledby="sortMenu">
           <button class="dropdown-item" *ngFor="let sortOrder of SORT_OPTION" (click)="sortOptionChange(sortOrder)" >{{sortOrder.text}}</button>
         </div>
       </div>
-      <div jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()"><div jhiSortBy="price"> <fa-icon class="p-1" icon="sort"></fa-icon></div></div>
+      <div jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()"><div jhiSortBy="{{selectedSortOption}}"><fa-icon class="p-1" icon="sort"></fa-icon></div></div>
+    </div>
+    <div class="col-4">
+      <form name="searchForm" role="form" novalidate (ngSubmit)="navigateToWithComponentValues()" [formGroup]="searchForm">
+        <div class="input-group">
+          <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" formControlName="search" />
+          <button type="submit" class="btn btn-outline-primary" data-mdb-ripple-init><fa-icon icon="search"></fa-icon></button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row my-2">
+    <div class="col d-flex">
+      <div ngbDropdown class="d-inline-block">
+        <b>Category</b> <button type="button" class="btn btn-outline-primary" id="filterCategory" ngbDropdownToggle>{{ !category ? 'ALL' : category }}</button>
+        <div ngbDropdownMenu  aria-labelledby="sortMenu">
+          <button class="dropdown-item" *ngFor="let categoryOption of categoryOptions" (click)="categoryOptionChange(categoryOption)" >{{categoryOption}}</button>
+        </div>
+      </div>
     </div>
   </div>
   <div class="row d-flex justify-content-center">
@@ -15,11 +33,12 @@
           <div class="card clickable">
             <div (click)="goToFoodDetail(foodVM.food!.id)">
               <img class="card-img-top" [src]="foodVM.food!.imgUrl" [alt]="foodVM.food!.name">
-              <div class="card-body">
-                <h6 class="card-title">{{ foodVM.food!.name }}</h6>
+              <div class="card-body pb-0">
+                <span [ngClass]="foodVM.food!.category===Category.FOOD ? 'badge bg-primary':'badge bg-info'"><small>{{ foodVM.food!.category }}</small></span>
+                <h5 class="card-title">{{ foodVM.food!.name }}</h5>
                 <h5 class="card-title">${{ foodVM.food!.price }} USD</h5>
                 <p *ngIf="foodVM.food!.description" class="card-text text-description">{{ foodVM.food!.description }}</p>
-                <div *ngIf="!foodVM.food!.description" style="height: 3rem;"></div>
+                <div *ngIf="!foodVM.food!.description" style="height: 1.5rem;"></div>
               </div>
             </div>
               <div class="card-footer d-flex justify-content-center">

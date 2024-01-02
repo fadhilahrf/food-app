@@ -9,6 +9,7 @@ import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/conf
 import { IFood } from '../food.model';
 import { EntityArrayResponseType, FoodService } from '../service/food.service';
 import { FoodDeleteDialogComponent } from '../delete/food-delete-dialog.component';
+import { Category } from 'app/entities/enumerations/category.model';
 
 @Component({
   selector: 'jhi-food',
@@ -24,6 +25,8 @@ export class FoodComponent implements OnInit {
   itemsPerPage = ITEMS_PER_PAGE;
   totalItems = 0;
   page = 1;
+
+  Category = Category;
 
   constructor(
     protected foodService: FoodService,

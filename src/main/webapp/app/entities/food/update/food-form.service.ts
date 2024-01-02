@@ -19,6 +19,7 @@ type FoodFormDefaults = Pick<NewFood, 'id'>;
 type FoodFormGroupContent = {
   id: FormControl<IFood['id'] | NewFood['id']>;
   name: FormControl<IFood['name']>;
+  category: FormControl<IFood['category']>;
   description: FormControl<IFood['description']>;
   price: FormControl<IFood['price']>;
   imgUrl: FormControl<IFood['imgUrl']>;
@@ -44,6 +45,9 @@ export class FoodFormService {
         },
       ),
       name: new FormControl(foodRawValue.name, {
+        validators: [Validators.required],
+      }),
+      category: new FormControl(foodRawValue.category, {
         validators: [Validators.required],
       }),
       description: new FormControl(foodRawValue.description),

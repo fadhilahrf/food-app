@@ -160,11 +160,11 @@ public class FoodResource {
     }
 
     @GetMapping("/get-all-foods-marketplace")
-    public ResponseEntity<List<FoodVM>> getAllFoodsForMarketplace(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<FoodVM>> getAllFoodsForMarketplace(@org.springdoc.core.annotations.ParameterObject Pageable pageable, @RequestParam(value ="category", required=false) String category, @RequestParam(value ="search", required=false) String search) {
         log.debug("REST request to get a page of Foods");
-        Page<FoodVM> page = foodService.findAllForMarketplace(pageable);
+        Page<FoodVM> page = foodService.findAllForMarketplace(pageable, category, search);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+        return ResponseEntity.ok().headers(headers).body(page.getContent().stream().filter(Objects::nonNull).toList());
     }
 
     /**

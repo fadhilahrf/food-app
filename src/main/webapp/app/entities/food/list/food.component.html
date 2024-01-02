@@ -44,6 +44,12 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
+          <th scope="col" jhiSortBy="category">
+            <div class="d-flex">
+              <span jhiTranslate="foodApp.food.category">Category</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col" jhiSortBy="description">
             <div class="d-flex">
               <span jhiTranslate="foodApp.food.description">Description</span>
@@ -71,6 +77,7 @@
             <a [routerLink]="['/food', food.id, 'view']">{{ food.id }}</a>
           </td>
           <td>{{ food.name }}</td>
+          <td> <span [ngClass]="food.category===Category.FOOD ? 'badge bg-primary':'badge bg-info'">{{ food.category }}</span></td>
           <td>{{ food.description }}</td>
           <td>{{ food.price }}</td>
           <td>{{ food.imgUrl }}</td>

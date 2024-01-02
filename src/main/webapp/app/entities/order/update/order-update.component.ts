@@ -42,6 +42,7 @@ export class OrderUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+    console.log(this.orderStatusValues)
   }
 
   previousState(): void {

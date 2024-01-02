@@ -230,10 +230,10 @@ angular-cli removes postcss-rtl processed inline css, processed rules must be ad
 
 .text-description {
   text-overflow: ellipsis;
-  max-height: 3rem;
+  max-height: 1.5rem;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
 }
 

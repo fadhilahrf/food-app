@@ -12,6 +12,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CropImageModalComponent } from '../crop-image-modal/crop-image-modal.component';
 import { ImageCroppedEvent, base64ToFile  } from 'ngx-image-cropper';
 import { BLANK_IMAGE_URL } from 'app/app.constants';
+import { Category } from 'app/entities/enumerations/category.model';
 
 @Component({
   selector: 'jhi-food-update',
@@ -26,6 +27,8 @@ export class FoodUpdateComponent implements OnInit {
   selectedFile?: File | null;
 
   BLANK_IMAGE_URL = BLANK_IMAGE_URL;
+
+  Category = Category;
 
   constructor(
     protected foodService: FoodService,

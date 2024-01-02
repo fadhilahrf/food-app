@@ -2,14 +2,16 @@ import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Data, ParamMap, Router } from '@angular/router';
 import { ASC, DEFAULT_SORT_DATA, DESC, SORT } from 'app/config/navigation.constants';
-import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
-import { IFood, IFoodVM } from 'app/entities/food/food.model';
-import { EntityArrayResponseType, FoodService } from 'app/entities/food/service/food.service';
+import { ITEMS_PER_PAGE, PAGE_HEADER, START_PAGE, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
+import { IFoodVM } from 'app/entities/food/food.model';
+import { FoodService } from 'app/entities/food/service/food.service';
 import { DataService } from 'app/shared/service/data.service';
 import { Observable, combineLatest, switchMap, tap } from 'rxjs';
 import { MarketplaceService } from '../service/marketpalce.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
+import { Category } from 'app/entities/enumerations/category.model';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'jhi-food-list',
@@ -23,32 +25,50 @@ export class FoodListComponent implements OnInit {
   predicate = 'id';
   ascending = true;
 
-  itemsPerPage = 5;
+  itemsPerPage = ITEMS_PER_PAGE;
   totalItems = 0;
-  page = 1;
+  page = START_PAGE;
 
   SORT_OPTION = [
     { value: 'name', text: 'name' },
     { value: 'price', text: 'price' },
+    { value: 'category', text: 'category' },
   ];
 
   selectedSortOption = 'name';
 
   account: Account | null = null;
 
+  Category = Category;
+
+  categoryOptions = Object.keys(Category);
+
+  category = null;
+
+  searchForm = this.formBuilder.group({
+    search: [null]
+  });
+
   constructor(
     protected foodService: FoodService,
     protected dataService: DataService,
     protected marketplaceService: MarketplaceService,
     protected activatedRoute: ActivatedRoute,
-    private accountService: AccountService,
-    public router: Router,
+    protected formBuilder: FormBuilder,
+    protected accountService: AccountService,
+    protected router: Router,
     ){}
 
   ngOnInit(): void {
     this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
     });
+    this.activatedRoute.queryParams.subscribe(params=>{
+      if(params['category']){
+        this.category = params['category'];
+      }
+    })
+    this.categoryOptions.push('ALL')
     this.load();
   }
 
@@ -76,8 +96,18 @@ export class FoodListComponent implements OnInit {
     this.selectedSortOption = $event.value;
   }
 
+  categoryOptionChange(value: any): void {
+    this.category = value;
+    this.navigateToWithComponentValues();
+  }
+
   goToFoodDetail(id: string): void {
     this.router.navigate([`/foods/${id}/detail`]);
+  }
+
+  protected searchFood(){
+    const search = this.searchForm.get(['search'])!.value;
+    console.log(search)
   }
 
   protected loadFromBackendWithRouteInformations(): Observable<HttpResponse<IFoodVM[]>> {
@@ -117,15 +147,35 @@ export class FoodListComponent implements OnInit {
       size: this.itemsPerPage,
       sort: this.getSortQueryParam(predicate, ascending),
     };
+    if (this.category && this.category != 'ALL') {
+      queryObject.category = this.category;
+    }
+
+    const search = this.searchForm.get(['search'])!.value;
+
+    if(search){
+      queryObject.search = search;
+    }
+
     return this.foodService.findAllForMarketplace(queryObject).pipe(tap(() => (this.isLoading = false)));
   }
 
   protected handleNavigation(page = this.page, predicate?: string, ascending?: boolean): void {
-    const queryParamsObj = {
+    const queryParamsObj: any = {
       page,
       size: this.itemsPerPage,
       sort: this.getSortQueryParam(predicate, ascending),
     };
+
+    if (this.category && this.category != 'ALL') {
+      queryParamsObj.category = this.category;
+    }
+
+    const search = this.searchForm.get(['search'])!.value;
+
+    if(search){
+      queryParamsObj.search = search;
+    }
 
     this.router.navigate(['./'], {
       relativeTo: this.activatedRoute,

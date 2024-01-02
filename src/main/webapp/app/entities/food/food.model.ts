@@ -1,6 +1,9 @@
+import { Category } from "../enumerations/category.model";
+
 export interface IFood {
   id: string;
   name?: string | null;
+  category?: keyof typeof Category | null;
   description?: string | null;
   price?: number | null;
   imgUrl?: string | null;

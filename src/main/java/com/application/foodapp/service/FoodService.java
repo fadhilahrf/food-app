@@ -1,6 +1,7 @@
 package com.application.foodapp.service;
 
 import com.application.foodapp.domain.Food;
+import com.application.foodapp.domain.enumeration.Category;
 import com.application.foodapp.repository.FoodRepository;
 import com.application.foodapp.service.dto.FoodDTO;
 import com.application.foodapp.service.dto.OrderDTO;
@@ -11,6 +12,8 @@ import com.application.foodapp.web.rest.vm.FoodVM;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -137,9 +140,23 @@ public class FoodService {
         return foodRepository.findAll(pageable).map(foodMapper::toDto);
     }
 
-    public Page<FoodVM> findAllForMarketplace(Pageable pageable) {
+    public Page<FoodVM> findAllForMarketplace(Pageable pageable, String category, String search) {
         Optional<OrderDTO> orderOptional = orderService.findFirstByCurrentUserAndStatusIsActive();
-        return foodRepository.findAll(pageable).map(food->{
+        Page<Food> query;
+        Category c;
+        if (StringUtils.isNotBlank(search) && StringUtils.isNotBlank(category)) {
+            c = Category.valueOf(category);
+            query = foodRepository.findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndCategory(search, search, c, pageable);
+        }else if (StringUtils.isNotBlank(search)) {
+            query = foodRepository.findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(pageable, search, search);
+        }else if (StringUtils.isNotBlank(category)) {
+            c = Category.valueOf(category);
+            query = foodRepository.findAllByCategory(pageable, c);
+        }else {
+            query = foodRepository.findAll(pageable);
+        }
+
+        return query.map(food->{
             FoodVM foodVM = new FoodVM();
             foodVM.setFood(foodMapper.toDto(food));
             foodVM.setOrderedQuantity(0L);
